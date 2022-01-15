@@ -5,8 +5,8 @@
 
 <header>
 	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
+		<a href="https://calebirwin.ca">
+			<img src={logo} alt="Caleb Irwin" />
 		</a>
 	</div>
 
