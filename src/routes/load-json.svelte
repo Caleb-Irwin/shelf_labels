@@ -12,6 +12,7 @@
 			reader.onload = (ev) => {
 				console.log(ev.target.result);
 				json = ev.target.result as string;
+				load();
 			};
 			reader.readAsText(files[0]);
 		}
