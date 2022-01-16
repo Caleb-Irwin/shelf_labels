@@ -10,7 +10,6 @@
 		if (browser && files && files[0]) {
 			const reader = new FileReader();
 			reader.onload = (ev) => {
-				console.log(ev.target.result);
 				json = ev.target.result as string;
 				load();
 			};
