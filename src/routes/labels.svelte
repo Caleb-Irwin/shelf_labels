@@ -3,7 +3,7 @@
 	import JsBarcode from 'jsbarcode';
 	import { onMount } from 'svelte';
 	// import LabelPage from '$lib/LabelPage.svelte';
-	import SvgLabelPage from '$lib/svgLabelPage.svelte';
+	import SvgLabelPage from '$lib/SvgLabelPage.svelte';
 	import divideArray from '$lib/divideArray';
 
 	let width = 3,

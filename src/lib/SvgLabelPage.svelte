@@ -1,6 +1,6 @@
 <script lang="ts">
 	import divideArray from './divideArray';
-	import SvgLabel from './SvgLabel.svelte';
+	import SvgLabel from './svgLabel.svelte';
 
 	export let page: Label[];
 	console.log('page: ', page);
