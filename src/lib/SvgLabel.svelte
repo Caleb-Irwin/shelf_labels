@@ -24,6 +24,22 @@
 
 <svg {x} {y} width="197" height="73">
 	<rect x="0" y="0" width="197" height="73" fill="white" />
+	<svg x="50" y="5" width="96.8px" height="84px" viewBox="0 0 242 140" class="barcode-svg-holder">
+		{#if label}
+			{#if isValidBarcode(label.barcode.toString())}
+				<svg
+					class="barcode-svg"
+					jsbarcode-format="upc"
+					jsbarcode-value={label.barcode}
+					jsbarcode-textmargin="0"
+					jsbarcode-fontoptions="bold"
+				/>
+			{:else if !isValidBarcode(label.barcode.toString())}
+				<svg class="barcode-svg" jsbarcode-value={label.barcode} />
+			{/if}
+		{/if}
+	</svg>
+	<rect x="0" y="0" width="197" height="50" fill="white" />
 	<text
 		x="50%"
 		y="5"
@@ -46,24 +62,4 @@
 				(label ? (label.price.toString().includes('.') ? '' : '.00') : '')}</tspan
 		>
 	</text>
-	<svg y="50" width="197" height="23">
-		{#if label}
-			{#if isValidBarcode(label.barcode.toString())}
-				<svg
-					style="transform: scale(0.7) translate(0, -66%);"
-					class="barcode-svg"
-					jsbarcode-format="upc"
-					jsbarcode-value={label.barcode}
-					jsbarcode-textmargin="0"
-					jsbarcode-fontoptions="bold"
-				/>
-			{:else if !isValidBarcode(label.barcode.toString())}
-				<svg
-					class="barcode-svg"
-					style="transform: scale(0.7) translate(0, -66%);"
-					jsbarcode-value={label.barcode}
-				/>
-			{/if}
-		{/if}
-	</svg>
 </svg>

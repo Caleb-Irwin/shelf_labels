@@ -6,11 +6,13 @@
 	import divideArray from '$lib/divideArray';
 
 	const tags = divideArray($tagsStore, 30),
-		loadBarcodes = () => {
-			JsBarcode('.barcode').init();
-			JsBarcode('.barcode-svg').init();
-			document.querySelectorAll('.barcode-svg').forEach((svg: HTMLElement) => {
-				svg.style.transform = 'scale(0.4) translate(125px, -75px)';
+		loadBarcodes = async () => {
+			await JsBarcode('.barcode-svg').init();
+			document.querySelectorAll('.barcode-svg-holder').forEach((svg: SVGSVGElement) => {
+				// svg.style.transform = 'scale(0.4) translate(125px, -75px)';
+				if (svg.childNodes[0]) {
+					svg.innerHTML = (svg.childNodes[0] as SVGSVGElement).innerHTML;
+				}
 			});
 		};
 	onMount(loadBarcodes);
@@ -21,21 +23,22 @@
 		if (html2pdf === null) {
 			html2pdf = await import('html2pdf.js');
 		}
-		await html2pdf
-			.default()
-			.set({
-				pagebreak: { mode: 'css' },
-				margin: 0.2,
-				filename: 'labels.pdf',
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2 },
-				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-			})
-			.from(document.getElementById('label-pages'))
-			.save()
-			.error((e) => {
-				console.log('Error logged: ', e);
-			});
+		try {
+			await html2pdf
+				.default()
+				.set({
+					pagebreak: { mode: 'css' },
+					margin: 0.2,
+					filename: 'labels.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { scale: 2 },
+					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+				})
+				.from(document.getElementById('label-pages'))
+				.save();
+		} catch (e) {
+			console.error(e);
+		}
 		loading = false;
 	};
 
