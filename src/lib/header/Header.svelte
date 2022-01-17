@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import logo from './svelte-logo.svg';
+	import logo from './favicon-32x32.png';
 </script>
 
 <header>
 	<div class="corner">
 		<a href="https://calebirwin.ca">
-			<img src={logo} alt="Caleb Irwin" />
+			<img class="bg-white rounded-full p-1" src={logo} alt="Caleb Irwin" />
 		</a>
 	</div>
 

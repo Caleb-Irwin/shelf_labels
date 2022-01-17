@@ -34,6 +34,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Load JSON</title>
+</svelte:head>
+
 <h1>Load JSON</h1>
 
 <div class="flex p-2 justify-center">

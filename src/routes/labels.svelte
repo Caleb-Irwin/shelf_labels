@@ -43,6 +43,10 @@
 		loading = false;
 </script>
 
+<svelte:head>
+	<title>Labels</title>
+</svelte:head>
+
 <h1>Labels</h1>
 <div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
 	30 labels per page, {$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
