@@ -8,10 +8,17 @@
 	const wrap = (s, w) =>
 		s.replace(new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, 'g'), '$1\n');
 	const lines = (() => {
-		if (label === null) return ['', '', ''];
-		let lines = wrap(label.name, 30).split('\n');
+		if (label === null) return ['', '', '', ''];
+		const lines = wrap(label.name.replace(/[^\x00-\x7F]/g, ''), 30).split('\n');
 
-		return [lines[0] ?? '', lines[1] ?? '', lines[2] ?? '', lines[3] ?? ''];
+		let out = [lines[0] ?? '', lines[1] ?? '', lines[2] ?? '', lines[3] ?? ''];
+		if (out[0] !== '') {
+			while (out[3] === '') {
+				out.unshift('');
+				out.pop();
+			}
+		}
+		return out;
 	})();
 </script>
 
@@ -32,8 +39,11 @@
 			x="50%"
 			dominant-baseline="middle"
 			text-anchor="middle"
-			y="40"
-			style="font-size: 12px; font-weight: bold;">${label?.price}</tspan
+			y="42"
+			style="font-size: 12px; font-weight: bold;"
+			>{(label ? '$' : '') +
+				(label?.price ?? '') +
+				(label ? (label.price.toString().includes('.') ? '' : '.00') : '')}</tspan
 		>
 	</text>
 	<svg y="50" width="197" height="23">
