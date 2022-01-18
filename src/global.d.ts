@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 interface Label {
-	barcode: number;
+	barcode: string;
 	name: string;
 	price: number;
 }

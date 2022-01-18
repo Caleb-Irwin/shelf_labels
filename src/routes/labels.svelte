@@ -7,7 +7,7 @@
 
 	const tags = divideArray($tagsStore, 30),
 		loadBarcodes = async () => {
-			await JsBarcode('.barcode-svg').init();
+			JsBarcode('.barcode-svg').init();
 			document.querySelectorAll('.barcode-svg-holder').forEach((svg: SVGSVGElement) => {
 				// svg.style.transform = 'scale(0.4) translate(125px, -75px)';
 				if (svg.childNodes[0]) {
