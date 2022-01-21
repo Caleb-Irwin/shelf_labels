@@ -1,25 +1,49 @@
 <script lang="ts">
+	import { browser } from '$app/env';
+	import { afterUpdate, onMount } from 'svelte';
+
 	import isValidBarcode from './isBarcode';
 
 	export let label: Label = null,
 		x: number,
 		y: number;
+	let l0: SVGTSpanElement, l1: SVGTSpanElement, l2: SVGTSpanElement;
+	let lines: string[][] = [[], [], label?.name.split(' ')];
+	const computeLines = () => {
+		if (label === null) return;
+		if (browser && l1 && l2 && l0) {
+			let updateLines = false;
 
-	const wrap = (s, w) =>
-		s.replace(new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, 'g'), '$1\n');
-	const lines = (() => {
-		if (label === null) return ['', '', '', ''];
-		const lines = wrap(label.name.replace(/[^\x00-\x7F]/g, ''), 30).split('\n');
-
-		let out = [lines[0] ?? '', lines[1] ?? '', lines[2] ?? '', lines[3] ?? ''];
-		if (out[0] !== '') {
-			while (out[3] === '') {
-				out.unshift('');
-				out.pop();
+			if (l1.getComputedTextLength() > 197) {
+				lines[0].push(lines[1].shift());
+				updateLines = true;
+			}
+			if (l2.getComputedTextLength() > 197) {
+				lines[1].push(lines[2].shift());
+				updateLines = true;
+			}
+			if (l0.getComputedTextLength() > 197) {
+				console.log('popped', lines[2].pop());
+				lines[2][lines[2].length - 1] += '...';
+				lines[2] = lines[1].concat(lines[2]);
+				lines[1] = lines[0];
+				lines[0] = [];
+				updateLines = true;
+			}
+			if (updateLines) {
+				lines = lines;
 			}
 		}
-		return out;
-	})();
+	};
+	$: computeLines();
+	afterUpdate(() => {
+		console.log('afterUpdate');
+		setTimeout(computeLines, 0);
+		computeLines();
+	});
+	$: linesDisplay = lines.map((line) =>
+		line && typeof line[0] === 'string' ? line.join(' ') : ''
+	);
 </script>
 
 <svg {x} {y} width="197" height="73">
@@ -45,18 +69,23 @@
 		y="5"
 		dominant-baseline="middle"
 		text-anchor="middle"
-		style="font-size: 8px; fill: black;"
+		style="font-size: 10px; fill: black;"
 	>
-		{lines[0]}
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="13">{lines[1]}</tspan>
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="21"> {lines[2]}</tspan>
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="29"> {lines[3]}</tspan>
+		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="6" bind:this={l0}
+			>{linesDisplay[0]}</tspan
+		>
+		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="17" bind:this={l1}>
+			{linesDisplay[1]}</tspan
+		>
+		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="28" bind:this={l2}>
+			{linesDisplay[2]}</tspan
+		>
 		<tspan
 			x="50%"
 			dominant-baseline="middle"
 			text-anchor="middle"
 			y="42"
-			style="font-size: 12px; font-weight: bold;"
+			style="font-size: 14px; font-weight: bold;"
 			>{(label ? '$' : '') +
 				(label?.price ?? '') +
 				(label ? (label.price.toString().includes('.') ? '' : '.00') : '')}</tspan
