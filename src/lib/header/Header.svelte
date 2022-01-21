@@ -25,6 +25,9 @@
 			<li class:active={$page.url.pathname === '/load-json'}>
 				<a sveltekit:prefetch href="/load-json">Load JSON</a>
 			</li>
+			<li class:active={$page.url.pathname === '/load-spreadsheet'}>
+				<a sveltekit:prefetch href="/load-spreadsheet">Load Spreadsheet</a>
+			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
 			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
