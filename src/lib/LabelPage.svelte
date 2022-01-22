@@ -2,16 +2,15 @@
 	import divideArray from './divideArray';
 	import SvgLabel from './SvgLabel.svelte';
 
-	export let page: Label[];
-	console.log('page: ', page);
+	export let page: Label[],
+		sf = 1;
 
 	let rows = divideArray(page, 3);
-	console.log(rows);
 </script>
 
 <svg
-	width="765"
-	height="990"
+	width={612 * sf}
+	height={792 * sf}
 	viewBox="0 0 612 792"
 	fill="none"
 	font-family="Arial"

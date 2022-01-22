@@ -37,7 +37,6 @@
 	};
 	$: computeLines();
 	afterUpdate(() => {
-		console.log('afterUpdate');
 		setTimeout(computeLines, 0);
 		computeLines();
 	});

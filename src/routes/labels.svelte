@@ -2,8 +2,9 @@
 	import { tagsStore } from '$lib/tagsStore';
 	import JsBarcode from 'jsbarcode';
 	import { onMount } from 'svelte';
-	import SvgLabelPage from '$lib/LabelPage.svelte';
 	import divideArray from '$lib/divideArray';
+	import { genPDF } from '$lib/genPdf';
+	import LabelPage from '$lib/LabelPage.svelte';
 
 	const tags = divideArray($tagsStore, 30),
 		loadBarcodes = async () => {
@@ -16,29 +17,22 @@
 			});
 		};
 	onMount(loadBarcodes);
-
-	let html2pdf = null;
-	const genPDF = async () => {
+	let c: HTMLCanvasElement,
+		refs: HTMLElement[] = [];
+	let sf = 3,
+		sfDisplay = 1.5;
+	const createPdf = async () => {
 		loading = true;
-		if (html2pdf === null) {
-			html2pdf = await import('html2pdf.js');
-		}
-		try {
-			await html2pdf
-				.default()
-				.set({
-					pagebreak: { mode: 'css' },
-					margin: 0.2,
-					filename: 'labels.pdf',
-					image: { type: 'jpeg', quality: 1 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				})
-				.from(document.getElementById('label-pages'))
-				.save();
-		} catch (e) {
-			console.error(e);
-		}
+		const s = refs.map((v) => {
+			let svgEl = v.childNodes[0] as SVGSVGElement;
+			svgEl.setAttribute('width', (612 * sf).toString());
+			svgEl.setAttribute('height', (792 * sf).toString());
+			const svgStr = v.innerHTML;
+			svgEl.setAttribute('width', (612 * sfDisplay).toString());
+			svgEl.setAttribute('height', (792 * sfDisplay).toString());
+			return svgStr;
+		});
+		await genPDF(s, c);
 		loading = false;
 	};
 
@@ -59,7 +53,7 @@
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white disabled:cursor-wait"
 		disabled={loading}
-		on:click={genPDF}
+		on:click={createPdf}
 		>{#if !loading} Generate PDF {:else} <p class="animate-ping">◯</p> {/if}</button
 	>
 	This may take a long time (more then 30 seconds)
@@ -72,12 +66,14 @@
 	{/if}
 </div>
 
-<div class="border-2 border-solid border-black flex justify-center">
+<div class="border-2 border-solid border-black flex justify-center {loading ? 'hidden' : ''}">
 	<div id="label-pages">
-		{#each tags as page}
-			<div class="m-1 break-after-page">
-				<SvgLabelPage {page} />
+		{#each tags as page, i}
+			<div class="m-1 break-after-page" bind:this={refs[i]}>
+				<LabelPage {page} sf={sfDisplay} />
 			</div>
 		{/each}
 	</div>
 </div>
+
+<canvas bind:this={c} class="hidden" />

@@ -4,7 +4,6 @@
 	import { tagsStore } from '$lib/tagsStore';
 
 	let files: FileList;
-	$: console.log(files ? files[0] : 'no files');
 	let json = '';
 	$: {
 		if (browser && files && files[0]) {

@@ -11,7 +11,6 @@
 			const reader = new FileReader();
 
 			reader.onload = (ev) => {
-				console.log(reader.result);
 				labelsFromFile = readGuild(reader.result as ArrayBuffer).map((g): Label => {
 					return {
 						barcode: g.upcId,
