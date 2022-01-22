@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
+	import { readGuild } from '$lib/parseXlsx';
 	import { tagsStore } from '$lib/tagsStore';
 
 	let files: FileList;
@@ -8,11 +9,19 @@
 	$: {
 		if (browser && files && files[0]) {
 			const reader = new FileReader();
+
 			reader.onload = (ev) => {
-				ev.target.result as string;
+				console.log(reader.result);
+				labelsFromFile = readGuild(reader.result as ArrayBuffer).map((g): Label => {
+					return {
+						barcode: g.upcId,
+						name: g.description,
+						price: g.priceL1
+					};
+				});
 				load();
 			};
-			reader.readAsText(files[0]);
+			reader.readAsArrayBuffer(files[0]);
 		}
 	}
 	const load = () => {
