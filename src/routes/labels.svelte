@@ -2,7 +2,7 @@
 	import { tagsStore } from '$lib/tagsStore';
 	import JsBarcode from 'jsbarcode';
 	import { onMount } from 'svelte';
-	import SvgLabelPage from '$lib/SvgLabelPage.svelte';
+	import SvgLabelPage from '$lib/LabelPage.svelte';
 	import divideArray from '$lib/divideArray';
 
 	const tags = divideArray($tagsStore, 30),
