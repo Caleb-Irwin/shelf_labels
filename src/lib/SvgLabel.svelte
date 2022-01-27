@@ -14,15 +14,15 @@
 		if (browser && l1 && l2 && l0) {
 			let updateLines = false;
 
-			if (l1.getComputedTextLength() > 197) {
+			if (l1.getComputedTextLength() > 180) {
 				lines[0].push(lines[1].shift());
 				updateLines = true;
 			}
-			if (l2.getComputedTextLength() > 197) {
+			if (l2.getComputedTextLength() > 180) {
 				lines[1].push(lines[2].shift());
 				updateLines = true;
 			}
-			if (l0.getComputedTextLength() > 197) {
+			if (l0.getComputedTextLength() > 180) {
 				console.log('popped', lines[2].pop());
 				lines[2][lines[2].length - 1] += '...';
 				lines[2] = lines[1].concat(lines[2]);
@@ -70,13 +70,32 @@
 		text-anchor="middle"
 		style="font-size: 10px; fill: black;"
 	>
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="6" bind:this={l0}
-			>{linesDisplay[0]}</tspan
+		<tspan
+			style="font-size: 10px;"
+			x="50%"
+			dominant-baseline="middle"
+			text-anchor="middle"
+			y="6"
+			bind:this={l0}>{linesDisplay[0]}</tspan
 		>
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="17" bind:this={l1}>
+		<tspan
+			style="font-size: 10px;"
+			x="50%"
+			dominant-baseline="middle"
+			text-anchor="middle"
+			y="17"
+			bind:this={l1}
+		>
 			{linesDisplay[1]}</tspan
 		>
-		<tspan x="50%" dominant-baseline="middle" text-anchor="middle" y="28" bind:this={l2}>
+		<tspan
+			style="font-size: 10px;"
+			x="50%"
+			dominant-baseline="middle"
+			text-anchor="middle"
+			y="28"
+			bind:this={l2}
+		>
 			{linesDisplay[2]}</tspan
 		>
 		<tspan

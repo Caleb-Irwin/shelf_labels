@@ -46,6 +46,8 @@
 
 <h1>Labels</h1>
 <div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
+	<label for="Height">Scale</label>
+	<input type="number" name="Height" id="" bind:value={sf} class="bg-slate-300 p-1 text-center" />
 	30 labels per page, {$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
 		$tagsStore.length / 30
 	)} total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''}
@@ -57,6 +59,7 @@
 		>{#if !loading} Generate PDF {:else} <p class="animate-ping">◯</p> {/if}</button
 	>
 	This may take a long time (more then 30 seconds)
+
 	<button on:click={() => (debug = !debug)}>Debug</button>
 	{#if debug}
 		<button
@@ -66,10 +69,10 @@
 	{/if}
 </div>
 
-<div class="border-2 border-solid border-black flex justify-center {loading ? 'hidden' : ''}">
-	<div id="label-pages">
+<div class="border-2 border-solid border-black bg-black flex justify-center">
+	<div class="flex flex-row justify-center flex-wrap" id="label-pages">
 		{#each tags as page, i}
-			<div class="m-1 break-after-page" bind:this={refs[i]}>
+			<div class="m-1" bind:this={refs[i]}>
 				<LabelPage {page} sf={sfDisplay} />
 			</div>
 		{/each}
