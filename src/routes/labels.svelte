@@ -20,20 +20,35 @@
 	let c: HTMLCanvasElement,
 		refs: HTMLElement[] = [];
 	let sf = 3,
-		sfDisplay = 1.5;
+		sfDisplay = 1.5,
+		nd = 0,
+		td = 0;
 	const createPdf = async () => {
 		loading = true;
-		const s = refs.map((v) => {
-			let svgEl = v.childNodes[0] as SVGSVGElement;
-			svgEl.setAttribute('width', (612 * sf).toString());
-			svgEl.setAttribute('height', (792 * sf).toString());
-			const svgStr = v.innerHTML;
-			svgEl.setAttribute('width', (612 * sfDisplay).toString());
-			svgEl.setAttribute('height', (792 * sfDisplay).toString());
-			return svgStr;
-		});
-		await genPDF(s, c);
-		loading = false;
+		setTimeout(async () => {
+			const s = refs.map((v) => {
+				let svgEl = v.childNodes[0] as SVGSVGElement;
+				svgEl.setAttribute('width', (612 * sf).toString());
+				svgEl.setAttribute('height', (792 * sf).toString());
+				const svgStr = v.innerHTML;
+				svgEl.setAttribute('width', (612 * sfDisplay).toString());
+				svgEl.setAttribute('height', (792 * sfDisplay).toString());
+				return svgStr;
+			});
+			await genPDF(s, c, (n, t) => {
+				nd = n;
+				td = t;
+				console.log(n);
+				return new Promise((resolve) => {
+					setTimeout(() => {
+						resolve();
+					});
+				});
+			});
+			loading = false;
+			nd = 0;
+			td = 0;
+		}, 0);
 	};
 
 	let debug = false,
@@ -58,8 +73,7 @@
 		on:click={createPdf}
 		>{#if !loading} Generate PDF {:else} <p class="animate-ping">◯</p> {/if}</button
 	>
-	This may take a long time (more then 30 seconds)
-
+	{#if loading && nd !== 0}Finished {nd} of {td} Pages {:else if loading}Starting...{/if}
 	<button on:click={() => (debug = !debug)}>Debug</button>
 	{#if debug}
 		<button

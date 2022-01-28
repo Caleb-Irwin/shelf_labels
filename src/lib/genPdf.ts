@@ -1,7 +1,13 @@
 import jsPDF from 'jspdf';
 import { Canvg } from 'canvg';
 
-export const genPDF = async (SVGs: string[], c: HTMLCanvasElement): Promise<void> => {
+export const genPDF = async (
+	SVGs: string[],
+	c: HTMLCanvasElement,
+	feedback: (n: number, t: number) => Promise<void> | void = () => {
+		return;
+	}
+): Promise<void> => {
 	const doc = new jsPDF({ unit: 'in', format: 'letter', orientation: 'portrait' });
 
 	const ctx = c.getContext('2d');
@@ -16,6 +22,7 @@ export const genPDF = async (SVGs: string[], c: HTMLCanvasElement): Promise<void
 		if (i !== 0) doc.addPage();
 		doc.addImage(dataURLs[i].toString(), 'png', 0, 0, 8.5, 11);
 		console.log(`Page ${i + 1} of ${SVGs.length} added!`);
+		await feedback(i + 1, SVGs.length);
 	}
 
 	doc.save('labels.pdf');
