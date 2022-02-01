@@ -136,3 +136,4 @@
 </div>
 
 <canvas bind:this={c} class="hidden" />
+<button on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Go to top of page</button>
