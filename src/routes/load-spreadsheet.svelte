@@ -11,13 +11,15 @@
 			const reader = new FileReader();
 
 			reader.onload = (ev) => {
-				labelsFromFile = readGuild(reader.result as ArrayBuffer).map((g): Label => {
-					return {
-						barcode: g.upcId,
-						name: g.description,
-						price: g.priceL1
-					};
-				});
+				labelsFromFile = readGuild(reader.result as ArrayBuffer)
+					.map((g): Label => {
+						return {
+							barcode: g['UPC#'],
+							name: g['Description'],
+							price: g['New Level 1']
+						};
+					})
+					.filter((l): l is Label => (l.barcode && l.name && l.price ? true : false));
 				load();
 			};
 			reader.readAsArrayBuffer(files[0]);
@@ -29,7 +31,7 @@
 				if (l.barcode && l.name && l.price) {
 					return true;
 				}
-				alert('Item failed validation: ' + l);
+				alert('Item failed validation: ' + JSON.stringify(l));
 				return false;
 			});
 			tagsStore.set(labels);

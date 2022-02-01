@@ -1,6 +1,6 @@
 import { read, utils } from 'xlsx';
 
-export const readGuild = (data: ArrayBuffer): guild[] => {
+export const readGuild = (data: ArrayBuffer): unknown[] => {
 	console.log('Starting Guild Items');
 
 	const guildSheet = read(data, {
@@ -50,5 +50,7 @@ export const readGuild = (data: ArrayBuffer): guild[] => {
 
 	// console.log(`Transform Guild, get short UPC and filter (${allItems.length} Long)`);
 	// return allItems;
-	return;
+	console.log(allItemsRaw.slice(0, 5));
+
+	return allItemsRaw;
 };
