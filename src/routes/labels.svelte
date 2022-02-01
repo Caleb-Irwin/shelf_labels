@@ -74,7 +74,8 @@
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
 	let debug = false,
-		loading = false;
+		loading = false,
+		editMode = false;
 </script>
 
 <svelte:head>
@@ -97,7 +98,15 @@
 	>
 	{#if loading && nd !== 0}Finished {nd} of {td} Pages ({Math.round(timePerPage * 100) / 100}s/page)
 	{:else if loading}Capturing...{/if}
-	<button on:click={() => (debug = !debug)}>Debug</button>
+	<div>
+		<button
+			class="rounded-md border-2 p-0.5 px-2 border-black"
+			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
+		>
+		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => (debug = !debug)}
+			>Debug</button
+		>
+	</div>
 	{#if debug}
 		<button
 			class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
@@ -105,6 +114,13 @@
 		>
 	{/if}
 </div>
+
+{#if editMode}
+	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
+		<h2 class="text-2xl text-black">Edit Menu</h2>
+		<p>Click on any tag to edit or remove</p>
+	</div>
+{/if}
 
 <div class="flex justify-center">
 	<button

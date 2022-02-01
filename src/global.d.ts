@@ -1,5 +1,9 @@
 /// <reference types="@sveltejs/kit" />
-interface Label {
+interface Label extends LabelSimple {
+	id: number;
+}
+
+interface LabelSimple {
 	barcode: string;
 	name: string;
 	price: number;

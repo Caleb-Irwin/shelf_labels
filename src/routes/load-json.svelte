@@ -17,8 +17,8 @@
 	}
 	const load = () => {
 		try {
-			const labels: Label[] = JSON.parse(json).filter((l) => {
-				if (l.barcode && l.name && l.price) {
+			const labels: Label[] = JSON.parse(json).filter((l: unknown): l is LabelSimple => {
+				if (l['barcode'] && l['name'] && l['price']) {
 					return true;
 				}
 				alert('Item failed validation: ' + l);

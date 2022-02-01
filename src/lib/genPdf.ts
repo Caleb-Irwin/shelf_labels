@@ -14,7 +14,7 @@ export const genPDF = async (
 	const dataURLs: string[] = [];
 	for (let i = 0; i < SVGs.length; i++) {
 		const s = SVGs[i];
-		const v = await Canvg.fromString(ctx, s);
+		const v = Canvg.fromString(ctx, s);
 
 		await v.render();
 		dataURLs.push(c.toDataURL('image/jpeg'));

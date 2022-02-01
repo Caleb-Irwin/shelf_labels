@@ -19,7 +19,11 @@
 	<rect width="612" height="792" fill="#F5F5F5" />
 	{#each rows as row, i}
 		<SvgLabel x={5} y={78 * i + 5} label={row[0]} />
-		<SvgLabel x={207} y={78 * i + 5} label={row[1]} />
-		<SvgLabel x={409} y={78 * i + 5} label={row[2]} />
+		{#if row[1]}
+			<SvgLabel x={207} y={78 * i + 5} label={row[1]} />
+		{/if}
+		{#if row[2]}
+			<SvgLabel x={409} y={78 * i + 5} label={row[2]} />
+		{/if}
 	{/each}
 </svg>

@@ -10,9 +10,9 @@
 		if (browser && files && files[0]) {
 			const reader = new FileReader();
 
-			reader.onload = (ev) => {
+			reader.onload = () => {
 				labelsFromFile = readGuild(reader.result as ArrayBuffer)
-					.map((g): Label => {
+					.map((g): LabelSimple => {
 						return {
 							barcode: g['UPC#'],
 							name: g['Description'],
