@@ -13,7 +13,7 @@
 		l2: SVGTSpanElement,
 		lines: string[][] = [[], [], label?.name.split(' ')],
 		i = 0,
-		oBC = label.barcode;
+		oText = label.name;
 	const computeLines = () => {
 		if (i > 100) return;
 		if (label === null) return;
@@ -43,10 +43,10 @@
 		}
 	};
 	$: {
-		if (oBC !== label.barcode) {
+		if (oText !== label.name) {
 			i = 0;
 			lines = [[], [], label?.name.split(' ')];
-			oBC = label.barcode;
+			oText = label.name;
 		}
 	}
 	$: computeLines();

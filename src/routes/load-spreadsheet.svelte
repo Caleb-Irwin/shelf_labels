@@ -35,7 +35,7 @@
 				return false;
 			});
 			tagsStore.set(labels);
-			goto('/labels');
+			goto('/labels?import=' + (Date.now() + 5000));
 		} catch (e) {
 			console.log(e);
 			alert('Try agian! Error = ' + e);

@@ -7,6 +7,9 @@
 	import LabelPage from '$lib/LabelPage.svelte';
 	import { browser } from '$app/env';
 	import EditItem from '$lib/editItem.svelte';
+	import { get } from 'svelte/store';
+
+	let loaded = false;
 
 	$: tags = divideArray($tagsStore, 30);
 	const loadBarcodes = async () => {
@@ -18,8 +21,28 @@
 				).innerHTML;
 			}
 		});
+		if (browser && loaded) {
+			console.log('storing!');
+			localStorage.setItem('labels', JSON.stringify(get(tagsStore)));
+		}
 	};
-	onMount(loadBarcodes);
+
+	onMount(() => {
+		if (
+			browser &&
+			!(
+				window.location.search.startsWith('?import=') &&
+				parseInt(window.location.search.slice(8)) > Date.now()
+			) &&
+			localStorage.getItem('labels')
+		) {
+			console.log('loading!');
+			tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+		}
+		loaded = true;
+		loadBarcodes();
+	});
+
 	let c: HTMLCanvasElement,
 		sf = 3,
 		sfDisplay = 1.5,
@@ -76,8 +99,7 @@
 	}
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
-	let debug = false,
-		loading = false,
+	let loading = false,
 		editMode = false,
 		tagOpen = null;
 </script>
@@ -108,22 +130,17 @@
 			on:click={() => {
 				tagsStore.set([]);
 				tagsStore.new();
+				setTimeout(loadBarcodes);
 			}}>Clear All Labels</button
 		>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black"
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
-		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => (debug = !debug)}
-			>Debug</button
+		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={loadBarcodes}
+			>Rerender Barcodes</button
 		>
 	</div>
-	{#if debug}
-		<button
-			class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
-			on:click={loadBarcodes}>Rerender Barcodes (don't press while generating pdf)</button
-		>
-	{/if}
 </div>
 
 {#if editMode}
@@ -136,6 +153,7 @@
 				on:click={() => {
 					tagsStore.new(null, true);
 					setTimeout(loadBarcodes);
+					tagOpen = 0;
 				}}>Prepend New Tag</button
 			>
 			<button
@@ -143,6 +161,7 @@
 				on:click={() => {
 					tagsStore.new(null);
 					setTimeout(loadBarcodes);
+					tagOpen = get(tagsStore).length - 1;
 				}}>Append New Tag</button
 			>
 		</div>
@@ -150,7 +169,14 @@
 {/if}
 
 {#if editMode && tagOpen !== null}
-	<EditItem tagId={tagOpen} />
+	<EditItem
+		tagId={tagOpen}
+		closeFunc={() => {
+			tagOpen = null;
+			tags = tags;
+			setTimeout(loadBarcodes);
+		}}
+	/>
 {/if}
 
 <div class="flex justify-center">
