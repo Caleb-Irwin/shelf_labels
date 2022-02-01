@@ -6,16 +6,19 @@
 	import { genPDF } from '$lib/genPdf';
 	import LabelPage from '$lib/LabelPage.svelte';
 	import { browser } from '$app/env';
+	import EditItem from '$lib/editItem.svelte';
 
-	const tags = divideArray($tagsStore, 30),
-		loadBarcodes = async () => {
-			JsBarcode('.barcode-svg').init();
-			document.querySelectorAll('.barcode-svg-holder').forEach((svg: SVGSVGElement) => {
-				if (svg.childNodes[0]) {
-					svg.innerHTML = (svg.childNodes[0] as SVGSVGElement).innerHTML;
-				}
-			});
-		};
+	$: tags = divideArray($tagsStore, 30);
+	const loadBarcodes = async () => {
+		JsBarcode('.barcode-svg').init();
+		document.querySelectorAll('.barcode-svg-holder').forEach((container: HTMLElement) => {
+			if (container.childNodes[1]) {
+				(container.childNodes[1] as SVGSVGElement).innerHTML = (
+					container.childNodes[2].childNodes[0] as SVGSVGElement
+				).innerHTML;
+			}
+		});
+	};
 	onMount(loadBarcodes);
 	let c: HTMLCanvasElement,
 		sf = 3,
@@ -75,7 +78,8 @@
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
 	let debug = false,
 		loading = false,
-		editMode = false;
+		editMode = false,
+		tagOpen = null;
 </script>
 
 <svelte:head>
@@ -101,6 +105,13 @@
 	<div>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black"
+			on:click={() => {
+				tagsStore.set([]);
+				tagsStore.new();
+			}}>Clear All Labels</button
+		>
+		<button
+			class="rounded-md border-2 p-0.5 px-2 border-black"
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
 		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => (debug = !debug)}
@@ -119,7 +130,27 @@
 	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
 		<h2 class="text-2xl text-black">Edit Menu</h2>
 		<p>Click on any tag to edit or remove</p>
+		<div>
+			<button
+				class="rounded-md border-2 p-0.5 px-2 border-black"
+				on:click={() => {
+					tagsStore.new(null, true);
+					setTimeout(loadBarcodes);
+				}}>Prepend New Tag</button
+			>
+			<button
+				class="rounded-md border-2 p-0.5 px-2 border-black"
+				on:click={() => {
+					tagsStore.new(null);
+					setTimeout(loadBarcodes);
+				}}>Append New Tag</button
+			>
+		</div>
 	</div>
+{/if}
+
+{#if editMode && tagOpen !== null}
+	<EditItem tagId={tagOpen} />
 {/if}
 
 <div class="flex justify-center">
@@ -143,7 +174,16 @@
 		{#each tags as page, i}
 			{#if pageOffset * 4 <= i && i < (pageOffset + 1) * 4}
 				<div class="label-page-holder m-1 border-2 border-black flex ">
-					<LabelPage {page} sf={sfDisplay} />
+					<LabelPage
+						on:tagClicked={(m) => {
+							if (editMode) {
+								tagOpen = m.detail.id;
+								window.scrollTo({ top: 0, behavior: 'smooth' });
+							}
+						}}
+						{page}
+						sf={sfDisplay}
+					/>
 				</div>
 			{/if}
 		{/each}

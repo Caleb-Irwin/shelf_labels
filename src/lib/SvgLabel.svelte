@@ -1,15 +1,21 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { afterUpdate } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	import isValidBarcode from './isBarcode';
 
 	export let label: Label = null,
 		x: number,
 		y: number;
-	let l0: SVGTSpanElement, l1: SVGTSpanElement, l2: SVGTSpanElement;
-	let lines: string[][] = [[], [], label?.name.split(' ')];
+	let l0: SVGTSpanElement,
+		l1: SVGTSpanElement,
+		l2: SVGTSpanElement,
+		lines: string[][] = [[], [], label?.name.split(' ')],
+		i = 0,
+		oBC = label.barcode;
 	const computeLines = () => {
+		if (i > 100) return;
 		if (label === null) return;
 		if (browser && l1 && l2 && l0) {
 			let updateLines = false;
@@ -33,8 +39,16 @@
 			if (updateLines) {
 				lines = lines;
 			}
+			i++;
 		}
 	};
+	$: {
+		if (oBC !== label.barcode) {
+			i = 0;
+			lines = [[], [], label?.name.split(' ')];
+			oBC = label.barcode;
+		}
+	}
 	$: computeLines();
 	afterUpdate(() => {
 		setTimeout(computeLines, 0);
@@ -43,13 +57,26 @@
 	$: linesDisplay = lines.map((line) =>
 		line && typeof line[0] === 'string' ? line.join(' ') : ''
 	);
+	$: validBarcode = isValidBarcode(label.barcode.toString());
+	const dispatch = createEventDispatcher();
 </script>
 
-<svg {x} {y} width="197" height="73">
+<svg
+	{x}
+	{y}
+	width="197"
+	height="73"
+	class="barcode-svg-holder"
+	on:click={() =>
+		dispatch('tagClicked', {
+			id: label.id
+		})}
+>
 	<rect x="0" y="0" width="197" height="73" fill="white" />
-	<svg x="50" y="5" width="96.8px" height="84px" viewBox="0 0 242 140" class="barcode-svg-holder">
+	<svg x="50" y="5" width="96.8px" height="84px" viewBox="0 0 242 140" />
+	<div style="display: none;">
 		{#if label}
-			{#if isValidBarcode(label.barcode.toString())}
+			{#if validBarcode}
 				<svg
 					class="barcode-svg"
 					jsbarcode-format="upc"
@@ -57,11 +84,11 @@
 					jsbarcode-textmargin="0"
 					jsbarcode-fontoptions="bold"
 				/>
-			{:else if !isValidBarcode(label.barcode.toString())}
+			{:else if !validBarcode}
 				<svg class="barcode-svg" jsbarcode-value={label.barcode} />
 			{/if}
 		{/if}
-	</svg>
+	</div>
 	<rect x="0" y="0" width="197" height="50" fill="white" />
 	<text
 		x="50%"
