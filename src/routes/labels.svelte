@@ -123,11 +123,11 @@
 	>
 </div>
 
-<div class="border-2 border-solid border-black bg-black flex justify-center">
+<div class="flex justify-center">
 	<div class="flex flex-row justify-center flex-wrap" id="label-pages">
 		{#each tags as page, i}
 			{#if pageOffset * 4 <= i && i < (pageOffset + 1) * 4}
-				<div class="label-page-holder m-1">
+				<div class="label-page-holder m-1 border-2 border-black flex ">
 					<LabelPage {page} sf={sfDisplay} />
 				</div>
 			{/if}
