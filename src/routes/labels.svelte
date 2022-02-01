@@ -17,8 +17,8 @@
 			});
 		};
 	onMount(loadBarcodes);
-	let c: HTMLCanvasElement;
-	let sf = 3,
+	let c: HTMLCanvasElement,
+		sf = 3,
 		sfDisplay = 1.5,
 		nd = 0,
 		td = 0,
@@ -73,7 +73,6 @@
 	}
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
-
 	let debug = false,
 		loading = false;
 </script>
