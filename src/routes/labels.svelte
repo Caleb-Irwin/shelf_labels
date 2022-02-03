@@ -12,7 +12,9 @@
 	let loaded = false;
 
 	$: tags = divideArray($tagsStore, 30);
-	const loadBarcodes = async () => {
+	const loadBarcodes = async (noStore = false) => {
+		console.log('loading barcodes');
+
 		JsBarcode('.barcode-svg').init();
 		document.querySelectorAll('.barcode-svg-holder').forEach((container: HTMLElement) => {
 			if (container.childNodes[1]) {
@@ -21,7 +23,7 @@
 				).innerHTML;
 			}
 		});
-		if (browser && loaded) {
+		if (browser && loaded && !noStore) {
 			console.log('storing!');
 			localStorage.setItem('labels', JSON.stringify(get(tagsStore)));
 		}
@@ -45,7 +47,6 @@
 
 	let c: HTMLCanvasElement,
 		sf = 3,
-		sfDisplay = 1.5,
 		nd = 0,
 		td = 0,
 		pageOffset = 0,
@@ -57,6 +58,7 @@
 			let s: string[] = [];
 			pageOffset = 0;
 			while (pageOffset <= Math.ceil($tagsStore.length / 30 / 4) - 1) {
+				await wait(3000);
 				const ref = document.querySelectorAll('.label-page-holder');
 				// console.log(ref);
 
@@ -67,16 +69,13 @@
 					svgEl.setAttribute('width', (612 * sf).toString());
 					svgEl.setAttribute('height', (792 * sf).toString());
 					const svgStr = v.innerHTML;
-					svgEl.setAttribute('width', (612 * sfDisplay).toString());
-					svgEl.setAttribute('height', (792 * sfDisplay).toString());
+					svgEl.setAttribute('width', '');
+					svgEl.setAttribute('height', '');
 					s.push(svgStr);
 				}
-				if (pageOffset === Math.ceil($tagsStore.length / 30 / 4) - 1) break;
+				// if (pageOffset === Math.ceil($tagsStore.length / 30 / 4) - 1) break;
 				pageOffset++;
-
-				await wait(3000);
 			}
-			pageOffset = 0;
 			startTime = Date.now();
 			await genPDF(s, c, (n, t) => {
 				nd = n;
@@ -91,11 +90,12 @@
 			loading = false;
 			nd = 0;
 			td = 0;
+			pageOffset = 0;
 		}, 0);
 	};
 	$: {
 		pageOffset;
-		if (browser) setTimeout(() => JsBarcode('.barcode-svg').init(), 0);
+		if (browser) setTimeout(() => loadBarcodes(true), 0);
 	}
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
@@ -137,7 +137,7 @@
 			class="rounded-md border-2 p-0.5 px-2 border-black"
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
-		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={loadBarcodes}
+		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => loadBarcodes()}
 			>Rerender Barcodes</button
 		>
 	</div>
@@ -208,7 +208,6 @@
 							}
 						}}
 						{page}
-						sf={sfDisplay}
 					/>
 				</div>
 			{/if}
