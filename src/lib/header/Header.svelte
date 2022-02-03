@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import logo from './favicon-32x32.png';
-	let menuOpen = true;
+	let menuOpen = false;
 </script>
 
 <nav class="bg-white shadow-lg">
