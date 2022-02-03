@@ -1,7 +1,13 @@
 <script lang="ts">
+	import { browser } from '$app/env';
+	import { get } from 'svelte/store';
+
 	import { tagsStore } from '$lib/tagsStore';
 
-	import { get } from 'svelte/store';
+	if (browser && localStorage.getItem('labels')) {
+		console.log('loading!');
+		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+	}
 
 	function downloadObjectAsJson(exportObj, exportName) {
 		const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
