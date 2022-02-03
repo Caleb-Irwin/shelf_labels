@@ -24,8 +24,11 @@
 	<title>Export JSON</title>
 </svelte:head>
 
-<h1>Load JSON</h1>
+<h1>Export JSON</h1>
 <p class="text-center">Use this to backup your labels.</p>
+<p class="text-center">
+	Format: <code>{`[{"barcode":"string","name":"string","price": number}]`}</code>
+</p>
 <div class="flex p-2 justify-center">
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"

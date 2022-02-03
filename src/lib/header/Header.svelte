@@ -53,14 +53,14 @@
 							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
 						>Load JSON</a
 					>
-					<a
+					<!-- <a
 						href="/load-spreadsheet"
 						sveltekit:prefetch
 						class="py-4 px-2 {$page.url.pathname === '/load-spreadsheet'
 							? 'text-orange-600 border-b-4 border-orange-600'
 							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
 						>Load Sheet</a
-					>
+					> -->
 					<a
 						href="/export-json"
 						sveltekit:prefetch
@@ -119,8 +119,7 @@
 						: ''}">Load JSON</a
 				>
 			</li>
-
-			<li>
+			<!-- <li>
 				<a
 					href="/load-spreadsheet"
 					sveltekit:prefetch
@@ -128,7 +127,7 @@
 						? 'text-white bg-orange-600 font-semibold'
 						: ''}">Load Sheet</a
 				>
-			</li>
+			</li> -->
 			<li>
 				<a
 					href="/export-json"
