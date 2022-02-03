@@ -38,7 +38,9 @@
 </svelte:head>
 
 <h1>Load JSON</h1>
-
+<p class="text-center">
+	This will overwrite saved labels. Please export before opening a new file.
+</p>
 <div class="flex p-2 justify-center">
 	<button class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white" on:click={load}
 		>Load</button

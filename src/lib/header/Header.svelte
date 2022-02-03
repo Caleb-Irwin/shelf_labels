@@ -1,130 +1,143 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import logo from './favicon-32x32.png';
+	let menuOpen = true;
 </script>
 
-<header>
-	<div class="corner">
-		<a href="https://calebirwin.ca">
-			<img class="bg-white rounded-full p-1" src={logo} alt="Caleb Irwin" />
-		</a>
+<nav class="bg-white shadow-lg">
+	<div class="max-w-6xl mx-auto px-4">
+		<div class="flex justify-between">
+			<div class="flex flex-grow justify-center">
+				<div>
+					<!-- Website Logo -->
+					<a
+						href="https://calebirwin.ca/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="flex items-center py-4 px-2"
+					>
+						<img src={logo} alt="Logo" class="h-8 w-8 mr-2" />
+					</a>
+				</div>
+				<!-- Primary Navbar items -->
+				<div class="hidden md:flex items-center space-x-1">
+					<a
+						href="/"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Home</a
+					>
+					<a
+						href="/about"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/about'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>About</a
+					>
+					<a
+						href="/labels"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/labels'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Labels</a
+					>
+					<a
+						href="/load-json"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/load-json'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Load JSON</a
+					>
+					<a
+						href="/load-spreadsheet"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/load-spreadsheet'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Load Sheet</a
+					>
+					<a
+						href="/export-json"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/export-json'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Export JSON</a
+					>
+				</div>
+			</div>
+			<div class="md:hidden flex items-center" on:click={() => (menuOpen = !menuOpen)}>
+				<button class="outline-none mobile-menu-button">
+					<svg
+						class=" w-6 h-6 text-gray-500 hover:text-green-500 "
+						x-show="!showMenu"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</button>
+			</div>
+		</div>
 	</div>
+	<!-- mobile menu -->
+	<div class="{menuOpen ? '' : 'hidden'} md:hidden mobile-menu">
+		<ul class="" on:click={() => (menuOpen = false)}>
+			<li>
+				<a
+					href="/"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Home</a
+				>
+			</li>
+			<li>
+				<a
+					href="/labels"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/labels'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Labels</a
+				>
+			</li>
+			<li>
+				<a
+					href="/load-json"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/load-json'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Load JSON</a
+				>
+			</li>
 
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li class:active={$page.url.pathname === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={$page.url.pathname === '/about'}>
-				<a sveltekit:prefetch href="/about">About</a>
+			<li>
+				<a
+					href="/load-spreadsheet"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/load-spreadsheet'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Load Sheet</a
+				>
 			</li>
-			<li class:active={$page.url.pathname === '/labels'}>
-				<a sveltekit:prefetch href="/labels">Labels</a>
-			</li>
-			<li class:active={$page.url.pathname === '/load-json'}>
-				<a sveltekit:prefetch href="/load-json">Load JSON</a>
-			</li>
-			<li class:active={$page.url.pathname === '/load-spreadsheet'}>
-				<a sveltekit:prefetch href="/load-spreadsheet">Load Spreadsheet</a>
+			<li>
+				<a
+					href="/export-json"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/export-json'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Export JSON</a
+				>
 			</li>
 		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="corner">
-		<!-- TODO put something else here? github link? -->
 	</div>
-</header>
-
-<style>
-	header {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
-
-	li {
-		position: relative;
-		height: 100%;
-	}
-
-	li.active::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--accent-color);
-	}
-
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 1em;
-		color: var(--heading-color);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
-	}
-
-	a:hover {
-		color: var(--accent-color);
-	}
-</style>
+</nav>
