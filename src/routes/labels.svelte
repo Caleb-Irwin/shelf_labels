@@ -56,9 +56,12 @@
 		loading = true;
 		setTimeout(async () => {
 			let s: string[] = [];
+			const prevOffset = pageOffset;
 			pageOffset = 0;
 			while (pageOffset <= Math.ceil($tagsStore.length / 30 / 4) - 1) {
-				await wait(3000);
+				if (Math.ceil($tagsStore.length / 30 / 4) !== 1) {
+					await wait(3000);
+				}
 				const ref = document.querySelectorAll('.label-page-holder');
 				// console.log(ref);
 
@@ -73,7 +76,7 @@
 					svgEl.setAttribute('height', '');
 					s.push(svgStr);
 				}
-				// if (pageOffset === Math.ceil($tagsStore.length / 30 / 4) - 1) break;
+				if (pageOffset === Math.ceil($tagsStore.length / 30 / 4) - 1) break;
 				pageOffset++;
 			}
 			startTime = Date.now();
@@ -90,7 +93,7 @@
 			loading = false;
 			nd = 0;
 			td = 0;
-			pageOffset = 0;
+			pageOffset = prevOffset;
 		}, 0);
 	};
 	$: {
