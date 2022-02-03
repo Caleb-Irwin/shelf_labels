@@ -6,6 +6,7 @@
 	import isValidBarcode from './isBarcode';
 
 	export let label: Label = null,
+		auxText: string = '',
 		x: number,
 		y: number;
 	let l0: SVGTSpanElement,
@@ -136,4 +137,11 @@
 				(label ? (label.price.toString().includes('.') ? '' : '.00') : '')}</tspan
 		>
 	</text>
+	<text
+		x="15%"
+		y="58"
+		dominant-baseline="middle"
+		text-anchor="middle"
+		style="font-size: 10px; fill: grey;">{auxText}</text
+	>
 </svg>

@@ -50,7 +50,12 @@
 		nd = 0,
 		td = 0,
 		pageOffset = 0,
-		startTime = Date.now();
+		startTime = Date.now(),
+		month = (new Date().getMonth() + 1).toString(),
+		auxText = `${month.length === 2 ? month : '0' + month}/${new Date()
+			.getFullYear()
+			.toString()
+			.slice(2)}`;
 	const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
 	const createPdf = async () => {
 		loading = true;
@@ -106,7 +111,7 @@
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
 	let loading = false,
-		editMode = false,
+		editMode = true,
 		tagOpen = null;
 </script>
 
@@ -116,12 +121,24 @@
 
 <h1>Labels</h1>
 <div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
-	<label for="Height">Scale</label>
-	<input type="number" name="Height" id="" bind:value={sf} class="bg-slate-300 p-1 text-center" />
-	30 labels per page, {$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
-		$tagsStore.length / 30
-	)} total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''}
+	<b
+		>{$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
+			$tagsStore.length / 30
+		)}
+		total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''} (30 labels per page)</b
+	>
 	<br />
+	<label for="Height">Auxiliary Text</label>
+	<input
+		placeholder="Nothing, Date, Sheft, Group, etc."
+		type="text"
+		name="Height"
+		id=""
+		bind:value={auxText}
+		class="bg-slate-300 p-1 text-center placeholder:text-slate-700"
+	/>
+	<label for="Height">Export Scale</label>
+	<input type="number" name="Height" id="" bind:value={sf} class="bg-slate-300 p-1 text-center" />
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white disabled:cursor-wait"
 		disabled={loading}
@@ -213,6 +230,7 @@
 								window.scrollTo({ top: 0, behavior: 'smooth' });
 							}
 						}}
+						{auxText}
 						{page}
 					/>
 				</div>
