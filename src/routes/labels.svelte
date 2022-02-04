@@ -219,10 +219,13 @@
 </div>
 
 <div class="flex justify-center">
-	<div class="flex flex-row justify-center flex-wrap" id="label-pages">
+	<div
+		class="flex-grow grid {tags.length === 1 ? 'grid-cols-1' : 'grid-cols-1 xl:grid-cols-2'}"
+		id="label-pages"
+	>
 		{#each tags as page, i}
 			{#if pageOffset * 4 <= i && i < (pageOffset + 1) * 4}
-				<div class="label-page-holder m-1 border-2 border-black flex ">
+				<div class="label-page-holder m-1 border-2 border-black flex">
 					<LabelPage
 						on:tagClicked={(m) => {
 							if (editMode) {
