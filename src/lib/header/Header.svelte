@@ -72,7 +72,7 @@
 			<div class="md:hidden flex items-center" on:click={() => (menuOpen = !menuOpen)}>
 				<button class="outline-none mobile-menu-button">
 					<svg
-						class=" w-6 h-6 text-gray-500 hover:text-green-500 "
+						class=" w-6 h-6 text-gray-500 hover:text-orange-600"
 						x-show="!showMenu"
 						fill="none"
 						stroke-linecap="round"
