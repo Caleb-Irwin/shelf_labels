@@ -61,6 +61,12 @@
 							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
 						>Export JSON</a
 					>
+					<a
+						href="https://github.com/Caleb-Irwin/shelf_tags"
+						class="py-4 px-2 text-slate-900 hover:text-orange-600 transition duration-300 font-semibold"
+						target="_blank"
+						rel="noopener noreferrer">Github</a
+					>
 				</div>
 			</div>
 			<div class="md:hidden flex items-center" on:click={() => (menuOpen = !menuOpen)}>
@@ -127,6 +133,14 @@
 					class="block text-sm px-2 py-4 {$page.url.pathname === '/export-json'
 						? 'text-white bg-orange-600 font-semibold'
 						: ''}">Export JSON</a
+				>
+			</li>
+			<li>
+				<a
+					href="https://github.com/Caleb-Irwin/shelf_tags"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="block text-sm px-2 py-4">Github</a
 				>
 			</li>
 		</ul>
