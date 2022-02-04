@@ -58,7 +58,7 @@
 	$: linesDisplay = lines.map((line) =>
 		line && typeof line[0] === 'string' ? line.join(' ') : ''
 	);
-	$: validBarcode = isValidBarcode(label.barcode.toString());
+	$: validBarcode = isValidBarcode(label.barcode ?? '');
 	const dispatch = createEventDispatcher();
 </script>
 

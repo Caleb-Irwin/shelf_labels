@@ -5,7 +5,14 @@
 	export let page: Label[],
 		auxText = '';
 
-	$: rows = divideArray(page, 3);
+	$: rows = divideArray(
+		page.map((v): Label => {
+			if (v.barcode.length === 0 && v.name.length === 0 && v.price === 0)
+				return { barcode: '123456789012', name: 'Empty Tag', price: 0, id: v.id };
+			return v;
+		}),
+		3
+	);
 </script>
 
 <!-- <div> -->

@@ -125,7 +125,7 @@
 		>{$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
 			$tagsStore.length / 30
 		)}
-		total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''} (30 labels per page)</b
+		total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''} (at 30 labels per page)</b
 	>
 	<br />
 	<label for="Height">Auxiliary Text</label>
@@ -154,7 +154,7 @@
 				tagsStore.set([]);
 				tagsStore.new();
 				setTimeout(loadBarcodes);
-			}}>Clear All Labels</button
+			}}>Delete/Clear All Labels</button
 		>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black"
@@ -169,7 +169,7 @@
 {#if editMode}
 	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
 		<h2 class="text-2xl text-black">Edit Menu</h2>
-		<p>Click on any tag to edit or remove</p>
+		<p class="font-semibold">Click on any tag to edit or remove</p>
 		<div>
 			<button
 				class="rounded-md border-2 p-0.5 px-2 border-black"
@@ -177,7 +177,7 @@
 					tagsStore.new(null, true);
 					setTimeout(loadBarcodes);
 					tagOpen = 0;
-				}}>Prepend New Tag</button
+				}}>Add New Tag at Beginning</button
 			>
 			<button
 				class="rounded-md border-2 p-0.5 px-2 border-black"
@@ -185,7 +185,7 @@
 					tagsStore.new(null);
 					setTimeout(loadBarcodes);
 					tagOpen = get(tagsStore).length - 1;
-				}}>Append New Tag</button
+				}}>Add New Tag at End</button
 			>
 		</div>
 	</div>

@@ -1,14 +1,7 @@
 import { writable, get } from 'svelte/store';
 
 export const tagsStore = (() => {
-	const { subscribe, set, update } = writable<Label[]>([
-		{
-			barcode: '123456789012',
-			name: 'Example Tag',
-			price: 1.23,
-			id: 0
-		}
-	]);
+	const { subscribe, set, update } = writable<Label[]>([]);
 	return {
 		set: (tags: LabelSimple[]) => {
 			set(tags.map((t, i) => ({ ...t, id: i })));
@@ -23,9 +16,9 @@ export const tagsStore = (() => {
 		new: (label?: LabelSimple, prepend = false) => {
 			if (!label) {
 				label = {
-					barcode: '123456789012',
-					name: 'Example Tag',
-					price: 1.23
+					barcode: '',
+					name: '',
+					price: 0
 				};
 			}
 			update((tags) => {
