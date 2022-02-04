@@ -30,14 +30,6 @@
 						>Home</a
 					>
 					<a
-						href="/about"
-						sveltekit:prefetch
-						class="py-4 px-2 {$page.url.pathname === '/about'
-							? 'text-orange-600 border-b-4 border-orange-600'
-							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
-						>About</a
-					>
-					<a
 						href="/labels"
 						sveltekit:prefetch
 						class="py-4 px-2 {$page.url.pathname === '/labels'
