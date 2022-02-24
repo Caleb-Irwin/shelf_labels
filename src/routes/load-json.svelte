@@ -21,7 +21,8 @@
 				if (l['barcode'] && l['name'] && l['price']) {
 					return true;
 				}
-				alert('Item failed validation: ' + l);
+				alert('Item failed validation: ' + JSON.stringify(l));
+				console.log(l);
 				return false;
 			});
 			tagsStore.set(labels);
