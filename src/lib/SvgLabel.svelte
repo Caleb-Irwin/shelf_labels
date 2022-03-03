@@ -133,8 +133,9 @@
 			y="42"
 			style="font-size: 14px; font-weight: bold;"
 			>{(label ? '$' : '') +
-				(label?.price ?? '') +
-				(label ? (label.price.toString().includes('.') ? '' : '.00') : '')}</tspan
+				(label?.price.toString().split('.')[0] ?? '') +
+				'.' +
+				(label?.price.toString().split('.')[1] ?? '').padEnd(2, '0') ?? ''}</tspan
 		>
 	</text>
 	<text
