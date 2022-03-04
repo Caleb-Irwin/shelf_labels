@@ -17,14 +17,19 @@
 	}
 	const load = () => {
 		try {
-			const labels: Label[] = JSON.parse(json).filter((l: unknown): l is LabelSimple => {
-				if (l['barcode'] && l['name'] && l['price']) {
-					return true;
-				}
-				alert('Item failed validation: ' + JSON.stringify(l));
-				console.log(l);
-				return false;
-			});
+			const labels: Label[] = JSON.parse(json)
+				.map((l) => {
+					if (l && l.description) l.name = l.description;
+					return l;
+				})
+				.filter((l: unknown): l is LabelSimple => {
+					if (l['barcode'] && l['name'] && l['price']) {
+						return true;
+					}
+					alert('Item failed validation: ' + JSON.stringify(l));
+					console.log(l);
+					return false;
+				});
 			tagsStore.set(labels);
 			goto('/labels?import=' + (Date.now() + 5000));
 		} catch (e) {
