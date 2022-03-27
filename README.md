@@ -16,7 +16,7 @@ npm run dev -- --open
 
 ## Building
 
-Read to deploy to Netlify!
+Ready to deploy to Netlify!
 
 ### More Details
 
