@@ -48,8 +48,9 @@
 	This will overwrite saved labels. Please export before opening a new file.
 </p>
 <p class="text-center">
-	Format: <code>{`[{"barcode":"string","name":"string","price": number}]`}</code>. Extra fields are
-	fine.
+	Format: <code
+		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number}]`}</code
+	>. <code>lastPrice</code> is optional. Extra fields are fine.
 </p>
 <div class="flex p-2 justify-center">
 	<button class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white" on:click={load}

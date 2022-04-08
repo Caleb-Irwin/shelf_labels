@@ -8,7 +8,7 @@
 	<div class="max-w-6xl mx-auto px-4">
 		<div class="flex justify-between">
 			<div class="flex flex-grow justify-center">
-				<div>
+				<div class="grid items-center">
 					<!-- Website Logo -->
 					<a
 						href="https://calebirwin.ca/"
@@ -60,6 +60,22 @@
 							? 'text-orange-600 border-b-4 border-orange-600'
 							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
 						>Export JSON</a
+					>
+					<a
+						href="/verify-labels"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/verify-labels'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Verify Labels</a
+					>
+					<a
+						href="/qb-merge"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/qb-merge'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>QuickBooks Merge</a
 					>
 					<a
 						href="https://github.com/Caleb-Irwin/shelf_tags"
@@ -133,6 +149,24 @@
 					class="block text-sm px-2 py-4 {$page.url.pathname === '/export-json'
 						? 'text-white bg-orange-600 font-semibold'
 						: ''}">Export JSON</a
+				>
+			</li>
+			<li>
+				<a
+					href="/verify-labels"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/verify-labels'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Verify Labels</a
+				>
+			</li>
+			<li>
+				<a
+					href="/qb-merge"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/qb-merge'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">QuickBooks Merge</a
 				>
 			</li>
 			<li>
