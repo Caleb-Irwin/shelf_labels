@@ -1,6 +1,14 @@
-import { writable, get } from 'svelte/store';
+import { writable, get, type Readable } from 'svelte/store';
 
-export const tagsStore = (() => {
+interface TagsStore extends Readable<Label[]> {
+	set: (tags: LabelSimple[]) => void;
+	update: (id: number, label: Label | LabelSimple) => void;
+	new: (label?: LabelSimple, prepend?: boolean) => void;
+	delete: (id: number) => void;
+	getTag: (id: number) => Label;
+}
+
+export const customTagsStore = (): TagsStore => {
 	const { subscribe, set, update } = writable<Label[]>([]);
 	return {
 		set: (tags: LabelSimple[]) => {
@@ -39,4 +47,6 @@ export const tagsStore = (() => {
 		},
 		subscribe
 	};
-})();
+};
+
+export const tagsStore = customTagsStore();

@@ -9,7 +9,7 @@
 		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
 	}
 
-	function downloadObjectAsJson(exportObj, exportName) {
+	function downloadObjectAsJson<T extends object>(exportObj: T, exportName: string) {
 		const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
 		const downloadAnchorNode = document.createElement('a');
 		downloadAnchorNode.setAttribute('href', dataStr);

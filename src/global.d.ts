@@ -7,6 +7,7 @@ interface LabelSimple {
 	barcode: string;
 	name: string;
 	price: number;
+	lastPrice?: number;
 }
 interface guild {
 	venderName: string;

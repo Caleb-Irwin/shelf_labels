@@ -18,8 +18,8 @@
 	const load = () => {
 		try {
 			const labels: Label[] = JSON.parse(json)
-				.map((l) => {
-					if (l && l.description) l.name = l.description;
+				.map((l: unknown) => {
+					if (l && l['description']) l['name'] = l['description'];
 					return l;
 				})
 				.filter((l: unknown): l is LabelSimple => {
