@@ -208,7 +208,7 @@
 
 {#if editMode && tagOpen !== null}
 	<EditItem
-		tagId={tagOpen.id}
+		tagId={tagOpen}
 		closeFunc={() => {
 			tagOpen = null;
 			tags = tags;
