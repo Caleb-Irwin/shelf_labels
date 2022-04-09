@@ -60,7 +60,7 @@
 	$: compBarWidth = width - 60 || 0;
 
 	onMount(() => {
-		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+		tagsStore.set(JSON.parse(localStorage.getItem('labels')) || []);
 		$tagsStore = get(tagsStore);
 		const conf = JSON.parse(localStorage.getItem('verifyConf'));
 		if (conf) {
