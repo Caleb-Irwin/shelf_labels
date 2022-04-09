@@ -17,6 +17,9 @@ export const autoFilter = (
 			}
 		}),
 		failed: labels.filter((v) => {
+			if (!v.lastPrice) {
+				return true;
+			}
 			const change = calcPercentChange(v);
 			if (change >= 0) {
 				return change >= autoFilterPositive;

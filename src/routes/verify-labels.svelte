@@ -21,7 +21,8 @@
 		index = 0,
 		results: { id: number; passed: boolean }[] = [],
 		editMode = false,
-		labelPreviewHolder;
+		labelPreviewHolder,
+		width;
 
 	$: sorted = autoFilter($tagsStore, autoFilterPositive, autoFilterNegative);
 	$: currentLabel = disableDecide ? undefined : sorted.failed[index];
@@ -56,6 +57,7 @@
 			color: '#F1F1F1'
 		}
 	];
+	$: compBarWidth = width - 60 || 0;
 
 	onMount(() => {
 		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
@@ -141,19 +143,19 @@
 	<title>Verify Lables</title>
 </svelte:head>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window on:keydown={handleKeydown} bind:innerWidth={width} />
 
 <h1>Verify Lables</h1>
 <p class="text-center">
-	Manuely verify labels before generating labels or merging into QuickBooks. Include <code
+	Manually verify labels before generating labels or merging into QuickBooks. Include <code
 		>lastPrice</code
 	>
-	field in <a href="/load-json">JSON import</a> to be able to auto verify labels with small price
-	changes. <br /> Note: Do not edit labels the standard way (<a href="/labels">Labels</a>) while
-	verifying! <br />
+	field in <a href="/load-json">JSON import</a> to be able to auto verify labels with small price changes.
+	Your progress is automatically saved so you can close your browser or refresh this page without losing
+	work.
 </p>
-<div class="text-center">
-	<h3>Controls:</h3>
+<div class="text-center flex items-center justify-center">
+	<h3 class="inline-block">Controls:</h3>
 	<span class="p-0.5 m-1 inline-flex justify-center"
 		><div class="h-6 inline-block"><MdKeyboardArrowLeft /></div>
 		fail label</span
@@ -195,12 +197,12 @@
 </div>
 
 {#if active && $tagsStore.length > 0}
-	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
+	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white text-center">
 		<ProgressBar
 			{series}
 			style="thin"
 			height={10}
-			width={window?.innerWidth - 60 || 0}
+			width={compBarWidth}
 			textSize={0}
 			bgColor="#80FF80"
 		/>

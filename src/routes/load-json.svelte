@@ -2,9 +2,11 @@
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { tagsStore } from '$lib/tagsStore';
+	import { onMount } from 'svelte';
 
-	let files: FileList;
-	let json = '';
+	let files: FileList,
+		json = '',
+		verifyHappening = false;
 	$: {
 		if (browser && files && files[0]) {
 			const reader = new FileReader();
@@ -38,6 +40,11 @@
 			alert('Try agian! Error = ' + e);
 		}
 	};
+	onMount(() => {
+		if (browser && localStorage.getItem('verifyConf')) {
+			verifyHappening = true;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -53,9 +60,19 @@
 		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number}]`}</code
 	>. <code>lastPrice</code> is optional. Extra fields are fine.
 </p>
+{#if verifyHappening}
+	<p class="text-center text-red-600">
+		A verify is in progress. Load is disabled. Finish or cancel it <a
+			class="underline text-red-600"
+			href="/verify-labels">here</a
+		>.
+	</p>
+{/if}
 <div class="flex p-2 justify-center">
-	<button class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white" on:click={load}
-		>Load</button
+	<button
+		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
+		disabled={verifyHappening}
+		on:click={load}>Load</button
 	>
 	<input
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"

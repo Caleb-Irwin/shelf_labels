@@ -10,6 +10,7 @@
 	import { get } from 'svelte/store';
 
 	let loaded = false;
+	let verifyHappening = false;
 
 	$: tags = divideArray($tagsStore, 30);
 	const loadBarcodes = async (noStore = false) => {
@@ -43,6 +44,10 @@
 		}
 		loaded = true;
 		loadBarcodes();
+		if (browser && localStorage.getItem('verifyConf')) {
+			verifyHappening = true;
+			editMode = false;
+		}
 	});
 
 	let c: HTMLCanvasElement,
@@ -149,7 +154,8 @@
 	{:else if loading}Capturing...{/if}
 	<div>
 		<button
-			class="rounded-md border-2 p-0.5 px-2 border-black"
+			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
+			disabled={verifyHappening}
 			on:click={() => {
 				tagsStore.set([]);
 				tagsStore.new();
@@ -157,13 +163,22 @@
 			}}>Delete/Clear All Labels</button
 		>
 		<button
-			class="rounded-md border-2 p-0.5 px-2 border-black"
+			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
+			disabled={verifyHappening}
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
 		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => loadBarcodes()}
 			>Rerender Barcodes</button
 		>
 	</div>
+	{#if verifyHappening}
+		<p class="text-red-600">
+			A verify is in progress. Edit and clear are disabled. Finish or cancel it <a
+				class="underline text-red-600"
+				href="/verify-labels">here</a
+			>.
+		</p>
+	{/if}
 </div>
 
 {#if editMode}
