@@ -68,6 +68,7 @@
 					return;
 				}
 				tagsStore.update(tagId, {
+					...tag,
 					name,
 					price,
 					barcode

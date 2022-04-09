@@ -20,6 +20,7 @@
 			const labels: Label[] = JSON.parse(json)
 				.map((l: unknown) => {
 					if (l && l['description']) l['name'] = l['description'];
+					if (l && l['oldPrice']) l['lastPrice'] = l['oldPrice'];
 					return l;
 				})
 				.filter((l: unknown): l is LabelSimple => {
