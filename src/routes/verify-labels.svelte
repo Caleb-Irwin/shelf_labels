@@ -61,7 +61,6 @@
 
 	onMount(() => {
 		tagsStore.set(JSON.parse(localStorage.getItem('labels')) || []);
-		$tagsStore = get(tagsStore);
 		const conf = JSON.parse(localStorage.getItem('verifyConf'));
 		if (conf) {
 			active = true;
