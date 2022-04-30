@@ -38,6 +38,14 @@
 						>Labels</a
 					>
 					<a
+						href="/verify-labels"
+						sveltekit:prefetch
+						class="py-4 px-2 {$page.url.pathname === '/verify-labels'
+							? 'text-orange-600 border-b-4 border-orange-600'
+							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
+						>Verify Labels</a
+					>
+					<a
 						href="/load-json"
 						sveltekit:prefetch
 						class="py-4 px-2 {$page.url.pathname === '/load-json'
@@ -62,20 +70,12 @@
 						>Export JSON</a
 					>
 					<a
-						href="/verify-labels"
+						href="/export-qb"
 						sveltekit:prefetch
-						class="py-4 px-2 {$page.url.pathname === '/verify-labels'
+						class="py-4 px-2 {$page.url.pathname === '/export-qb'
 							? 'text-orange-600 border-b-4 border-orange-600'
 							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
-						>Verify Labels</a
-					>
-					<a
-						href="/qb-merge"
-						sveltekit:prefetch
-						class="py-4 px-2 {$page.url.pathname === '/qb-merge'
-							? 'text-orange-600 border-b-4 border-orange-600'
-							: 'text-slate-900 hover:text-orange-600 transition duration-300'}  font-semibold "
-						>QuickBooks Merge</a
+						>Export QuickBooks CSV</a
 					>
 					<a
 						href="https://github.com/Caleb-Irwin/shelf_tags"
@@ -126,6 +126,15 @@
 			</li>
 			<li>
 				<a
+					href="/verify-labels"
+					sveltekit:prefetch
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/verify-labels'
+						? 'text-white bg-orange-600 font-semibold'
+						: ''}">Verify Labels</a
+				>
+			</li>
+			<li>
+				<a
 					href="/load-json"
 					sveltekit:prefetch
 					class="block text-sm px-2 py-4 {$page.url.pathname === '/load-json'
@@ -153,20 +162,11 @@
 			</li>
 			<li>
 				<a
-					href="/verify-labels"
+					href="/export-qb"
 					sveltekit:prefetch
-					class="block text-sm px-2 py-4 {$page.url.pathname === '/verify-labels'
+					class="block text-sm px-2 py-4 {$page.url.pathname === '/export-qb'
 						? 'text-white bg-orange-600 font-semibold'
-						: ''}">Verify Labels</a
-				>
-			</li>
-			<li>
-				<a
-					href="/qb-merge"
-					sveltekit:prefetch
-					class="block text-sm px-2 py-4 {$page.url.pathname === '/qb-merge'
-						? 'text-white bg-orange-600 font-semibold'
-						: ''}">QuickBooks Merge</a
+						: ''}">Export QuickBooks CSV</a
 				>
 			</li>
 			<li>
