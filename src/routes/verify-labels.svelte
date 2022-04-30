@@ -22,7 +22,7 @@
 		results: { id: number; passed: boolean }[] = [],
 		editMode = false,
 		labelPreviewHolder,
-		width;
+		width: number;
 
 	$: sorted = autoFilter($tagsStore, autoFilterPositive, autoFilterNegative);
 	$: currentLabel = disableDecide ? undefined : sorted.failed[index];

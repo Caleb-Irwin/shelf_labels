@@ -8,6 +8,8 @@ interface LabelSimple {
 	name: string;
 	price: number;
 	lastPrice?: number;
+	qbAccount?: string;
+	qbName?: string;
 }
 interface guild {
 	venderName: string;
