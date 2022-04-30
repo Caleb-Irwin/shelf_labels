@@ -81,6 +81,7 @@
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
 		type="file"
 		bind:files
+		disabled={verifyHappening}
 	/>
 </div>
 
