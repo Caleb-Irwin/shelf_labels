@@ -80,12 +80,23 @@
 <div class="flex p-2 justify-center">
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
-		on:click={() => downloadLabelsAsCSV(get(tagsStore), 'quickbooks-export')}
-		>Download Change CSV</button
+		on:click={() =>
+			downloadLabelsAsCSV(
+				get(tagsStore),
+				`quickbooks-export-${new Date()
+					.toISOString()
+					.substring(0, new Date().toISOString().indexOf('T'))}`
+			)}>Download Change CSV</button
 	>
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
-		on:click={() => downloadLabelsAsCSV(get(tagsStore), 'quickbooks-export', true)}
-		>Download Revert CSV</button
+		on:click={() =>
+			downloadLabelsAsCSV(
+				get(tagsStore),
+				`quickbooks-export-revert-${new Date()
+					.toISOString()
+					.substring(0, new Date().toISOString().indexOf('T'))}`,
+				true
+			)}>Download Revert CSV</button
 	>
 </div>
