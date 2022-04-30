@@ -57,8 +57,11 @@
 </p>
 <p class="text-center">
 	Format: <code
-		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number}]`}</code
-	>. <code>lastPrice</code> is optional. Extra fields are fine.
+		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number, "qbName": string, "qbAccount": string}]`}</code
+	>. <code>lastPrice</code> is optional, but nice for <a href="/verify-labels">Verify Labels</a>.
+	<code>qbAccount</code>
+	and <code>qbName</code> fields are needed for <a href="/export-qb">Export to Quickbooks CSV</a> but
+	are otherwise optional. Extra fields are fine.
 </p>
 {#if verifyHappening}
 	<p class="text-center text-red-600">

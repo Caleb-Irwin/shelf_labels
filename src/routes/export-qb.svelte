@@ -37,11 +37,31 @@
 	<title>Export QuickBooks CSV</title>
 </svelte:head>
 
-<h1>Export to QuickBooks CSV</h1>
-<p class="text-center">
-	Modify or create QuickBooks items from labels. Always backup QuickBooks before using. We recommend
-	you use <a href="/verify-labels">verify labels </a> first.
-</p>
+<div class="text-center m-2">
+	<h1>Export to QuickBooks CSV</h1>
+	<p>
+		Modify or create QuickBooks items from labels. Always backup QuickBooks before using. We
+		recommend you use <a href="/verify-labels">verify labels </a> first. You have to have
+		<code>qbAccount</code>
+		and <code>qbName</code> fields in your labels, which can only be added from importing via
+		<a href="/load-json">Load JSON</a>!
+	</p>
+	<h2 class="text-xl">To Import to QuickBooks</h2>
+	<p>Must be done as administrator.</p>
+	<ol class="list-decimal">
+		<li>Download CSV from here (if you have not already)</li>
+		<li>Back up your QuickBooks company file!</li>
+		<li>Open Import a File window (File > Utilities > Import > Excel Files)</li>
+		<li>Select import file (that you exported from here)</li>
+		<li>
+			If not already set: click the Preferences tab and set duplicate handling to replace, except
+			blank fields and error handling to only rows that do not contain errors.
+		</li>
+		<li>Preview data</li>
+		<li>Click Import</li>
+		<li>Use the error log to correct errors (there many be none)</li>
+	</ol>
+</div>
 
 <div class="flex p-2 justify-center">
 	<button
