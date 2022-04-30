@@ -29,16 +29,18 @@
 	$: currentChangePercent = currentLabel && calcPercentChange(currentLabel);
 	$: {
 		currentLabel;
-		const el = labelPreviewHolder?.querySelector('.barcode-svg');
-		if (el) {
-			JsBarcode(el).init();
-			const container = labelPreviewHolder.querySelector('.barcode-svg-holder');
-			if (container.childNodes[1]) {
-				(container.childNodes[1] as SVGSVGElement).innerHTML = (
-					container.childNodes[2].childNodes[0] as SVGSVGElement
-				).innerHTML;
+		setTimeout(() => {
+			const el = labelPreviewHolder?.querySelector('.barcode-svg');
+			if (el) {
+				JsBarcode(el).init();
+				const container = labelPreviewHolder.querySelector('.barcode-svg-holder');
+				if (container.childNodes[1]) {
+					(container.childNodes[1] as SVGSVGElement).innerHTML = (
+						container.childNodes[2].childNodes[0] as SVGSVGElement
+					).innerHTML;
+				}
 			}
-		}
+		});
 	}
 	$: disableGoBack = index === 0;
 	$: disableDecide = index >= sorted.failed.length;
