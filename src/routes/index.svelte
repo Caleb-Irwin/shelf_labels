@@ -40,6 +40,13 @@
 				</ul>
 			</li>
 			<li>
+				<a class="text-2xl underline" href="/verify-labels">Verify Lables</a>
+				<p>
+					Lets you easily filter labels to remove unwanted ones. Useful for imported price changes.
+					Lets you filter by percent changed.
+				</p>
+			</li>
+			<li>
 				<a class="text-2xl underline" href="/load-json" sveltekit:prefetch>Load JSON</a>
 				<p>
 					Import your tags (in JSON format) to restore backups or to import from an external source.
@@ -48,6 +55,13 @@
 			<li>
 				<a class="text-2xl underline" href="/export-json" sveltekit:prefetch>Export JSON</a>
 				<p>Export your tags (in JSON format) to backup or share your shelf labels.</p>
+			</li>
+			<li>
+				<a class="text-2xl underline" href="/export-qb" sveltekit:prefetch>Export QuickBooks CSV</a>
+				<p>
+					Export your labels to QuickBooks CSV format for import. Provides a second CSV file to undo
+					changes. Extra feilds are required.
+				</p>
 			</li>
 		</ul>
 		<p class="text-center pt-2">

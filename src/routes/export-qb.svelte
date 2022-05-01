@@ -50,11 +50,15 @@
 <div class="text-center m-4">
 	<h1>Export to QuickBooks CSV</h1>
 	<p>
-		Modify or create QuickBooks items from labels. Always backup QuickBooks before using. We
-		recommend you use <a href="/verify-labels">verify labels </a> first. You have to have
+		Modify or create QuickBooks items from labels. We recommend you use <a href="/verify-labels"
+			>verify labels
+		</a>
+		first. You have to have
 		<code>qbAccount</code>
 		and <code>qbName</code> fields in your labels, which can only be added from importing via
-		<a href="/load-json">Load JSON</a>!
+		<a href="/load-json">Load JSON</a>! If you have a <code>lastPrice</code> field, you can make a revert
+		csv that will undo the price changes this makes. We recommend against using this to create new items
+		in Quickbooks because it does not export descriptions due to QuickBooks limitations on exports.
 	</p>
 	<h2 class="text-xl">To Import to QuickBooks</h2>
 	<p>Must be done as administrator.</p>
