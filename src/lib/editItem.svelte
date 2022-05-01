@@ -5,18 +5,28 @@
 	let price: number,
 		name: string,
 		barcode: string,
-		originalId = -1;
+		qbAccount: string,
+		qbName: string,
+		lastPrice: number,
+		originalId = -1,
+		editExtraFeilds: boolean = false;
 	$: tag = tagsStore.getTag(tagId);
 	$: {
 		if (tagId !== originalId) {
 			price = tag.price;
 			name = tag.name;
 			barcode = tag.barcode;
+			qbAccount = tag.qbAccount;
+			qbName = tag.qbName;
+			lastPrice = tag.lastPrice;
 			originalId = tagId;
 		}
 	}
 	$: {
 		if (price === 0 || isNaN(price)) price = undefined;
+		if (lastPrice === 0 || isNaN(lastPrice)) lastPrice = undefined;
+		if (qbAccount === '') qbAccount = undefined;
+		if (qbName === '') qbName = undefined;
 	}
 </script>
 
@@ -49,6 +59,41 @@
 		bind:value={barcode}
 		class="bg-slate-300 p-1 text-center placeholder:text-gray-600"
 	/>
+	<button
+		class="underline"
+		on:click={() => {
+			editExtraFeilds = !editExtraFeilds;
+		}}>{editExtraFeilds ? 'Hide Extra Feilds' : 'Show Extra Feilds'}</button
+	>
+	{#if editExtraFeilds}
+		<label for="account">QB Account</label>
+		<input
+			type="text"
+			placeholder="Account in QuickBooks (Type or Paste here)"
+			name="account"
+			id=""
+			bind:value={qbAccount}
+			class="bg-slate-300 p-1 text-center placeholder:text-gray-600"
+		/>
+		<label for="name">QB Name</label>
+		<input
+			type="text"
+			name="name"
+			id=""
+			bind:value={qbName}
+			placeholder="Name in QuickBooks (Type or Paste here)"
+			class="bg-slate-300 p-1 text-center placeholder:text-gray-600"
+		/>
+		<label for="lastPrice">Last Price</label>
+		<input
+			type="number"
+			name="lastPrice"
+			id=""
+			placeholder="Previous Price (Type or Paste here)"
+			bind:value={lastPrice}
+			class="bg-slate-300 p-1 text-center placeholder:text-gray-600"
+		/>
+	{/if}
 	<div class="mt-2">
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black"
@@ -71,7 +116,10 @@
 					...tag,
 					name,
 					price,
-					barcode
+					barcode,
+					qbAccount,
+					qbName,
+					lastPrice
 				});
 				closeFunc();
 			}}>💾 Save Tag*</button
