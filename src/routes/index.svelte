@@ -64,15 +64,6 @@
 				</p>
 			</li>
 		</ul>
-		<p class="text-center pt-2">
-			Made by <a
-				class="underline"
-				href="http://calebirwin.ca/"
-				target="_blank"
-				rel="noopener noreferrer"
-				>Caleb Irwin
-			</a>for Office Experts
-		</p>
 	</div>
 </section>
 
