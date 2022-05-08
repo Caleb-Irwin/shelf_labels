@@ -48,8 +48,10 @@
 		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md h-7"
 		bind:value={open}
 		on:change={(e) => {
-			// @ts-expect-error no type for event
+			// @ts-expect-error missing target type
 			confStore.changeOpenLabelSet(e.target.value, labelStore);
+			// @ts-expect-error missing target type
+			e.target.blur();
 		}}
 	>
 		{#each $confStore.allLabelSets as labelSet}

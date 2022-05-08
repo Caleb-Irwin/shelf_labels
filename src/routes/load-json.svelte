@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import { labelStore, confStore } from '$lib/labelStore';
+	import { confStore } from '$lib/labelStore';
 	import { onMount } from 'svelte';
 
 	let files: FileList,
 		json = '',
-		fileName = '',
-		verifyHappening = false;
+		fileName = '';
 	$: {
 		if (browser && files && files[0]) {
 			fileName = files[0].name;
@@ -46,11 +45,6 @@
 			alert('Try agian! Error = ' + e);
 		}
 	};
-	onMount(() => {
-		if (browser && localStorage.getItem('verifyConf')) {
-			verifyHappening = true;
-		}
-	});
 </script>
 
 <svelte:head>
@@ -69,25 +63,16 @@
 	and <code>qbName</code> fields are needed for <a href="/export-qb">Export to Quickbooks CSV</a> but
 	are otherwise optional. Extra fields are fine.
 </p>
-{#if verifyHappening}
-	<p class="text-center text-red-600">
-		A verify is in progress. Load is disabled. Finish or cancel it <a
-			class="underline text-red-600"
-			href="/verify-labels">here</a
-		>.
-	</p>
-{/if}
+
 <div class="flex p-2 justify-center">
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
-		disabled={verifyHappening}
 		on:click={load}>Load</button
 	>
 	<input
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
 		type="file"
 		bind:files
-		disabled={verifyHappening}
 	/>
 </div>
 

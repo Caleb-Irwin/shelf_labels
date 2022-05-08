@@ -9,12 +9,9 @@
 	import EditItem from '$lib/editItem.svelte';
 	import { get } from 'svelte/store';
 
-	let verifyHappening = false;
-
 	$: tags = divideArray($labelStore, 30);
-	const loadBarcodes = async (noStore = false) => {
+	const loadBarcodes = async () => {
 		console.log('loading barcodes');
-
 		JsBarcode('.barcode-svg').init();
 		document.querySelectorAll('.barcode-svg-holder').forEach((container: HTMLElement) => {
 			if (container.childNodes[1]) {
@@ -27,10 +24,6 @@
 
 	onMount(() => {
 		loadBarcodes();
-		if (browser && localStorage.getItem('verifyConf')) {
-			verifyHappening = true;
-			editMode = false;
-		}
 	});
 
 	let c: HTMLCanvasElement,
@@ -95,12 +88,14 @@
 	$: {
 		pageOffset;
 		$confStore.id;
-		if (browser) setTimeout(() => loadBarcodes(true), 0);
+		if (browser) setTimeout(() => loadBarcodes(), 0);
 	}
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
+	$: labelSetLocked = $confStore.id ? $confStore.locked : false;
+	$: editMode = !labelSetLocked;
+
 	let loading = false,
-		editMode = true,
 		tagOpen = null;
 </script>
 
@@ -139,16 +134,16 @@
 	<div>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
-			disabled={verifyHappening}
+			disabled={labelSetLocked}
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
 		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => loadBarcodes()}
 			>Rerender Barcodes</button
 		>
 	</div>
-	{#if verifyHappening}
+	{#if labelSetLocked}
 		<p class="text-red-600">
-			A verify is in progress. Edit and clear are disabled. Finish or cancel it <a
+			Label set is being verifyed. Editing is disabled. Finish or cancel it <a
 				class="underline text-red-600"
 				href="/verify-labels">here</a
 			>.

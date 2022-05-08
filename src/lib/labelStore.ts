@@ -1,11 +1,19 @@
 import { writable, get, type Readable } from 'svelte/store';
 import { nanoid } from 'nanoid';
 
+interface VerifyConf {
+	index: number;
+	autoFilterPositive: number;
+	autoFilterNegative: number;
+	results: { id: number; passed: boolean }[];
+}
+
 interface Metadata {
 	id: string;
 	name: string;
 	lastModified: number;
 	locked: boolean;
+	verifyConf?: VerifyConf;
 }
 
 interface LabelSet extends Metadata {
@@ -27,6 +35,8 @@ interface LabelsStore extends Readable<Label[]> {
 interface ConfStore extends Readable<AppConf> {
 	init: () => void;
 	setName: (name: string) => void;
+	setLocked: (locked: boolean) => void;
+	setVerifyConf: (verifyConf: VerifyConf) => void;
 	createLabelSet: (name: string, labels?: Label[], switchToCreated?: boolean) => LabelSet;
 	deleteLabelSet: (id: string) => void;
 	changeOpenLabelSet: (id: string) => void;
@@ -94,7 +104,7 @@ export const createConfStore = (labelStore: LabelsStore): ConfStore => {
 		localStorage.setItem('conf', JSON.stringify(get({ subscribe })));
 	};
 	const getLabelSetIndexById = (id: string): number =>
-		get({ subscribe }).allLabelSets.findIndex((v, i) => v.id === id);
+		get({ subscribe }).allLabelSets.findIndex((v) => v.id === id);
 
 	const syncOpenToAll = () => {
 		const open = get({ subscribe });
@@ -103,7 +113,8 @@ export const createConfStore = (labelStore: LabelsStore): ConfStore => {
 			name: open.name,
 			lastModified: open.lastModified,
 			locked: open.locked,
-			labels: JSON.parse(localStorage.getItem('labels') || '')
+			labels: JSON.parse(localStorage.getItem('labels') || ''),
+			verifyConf: open.verifyConf
 		};
 		open.allLabelSets[getLabelSetIndexById(open.id)] = newConf;
 		set(open);
@@ -147,7 +158,8 @@ export const createConfStore = (labelStore: LabelsStore): ConfStore => {
 				name: newSet.name,
 				lastModified: Date.now(),
 				locked: newSet.locked,
-				allLabelSets: prev.allLabelSets
+				allLabelSets: prev.allLabelSets,
+				verifyConf: newSet.verifyConf
 			};
 		});
 		syncOpenToAll();
@@ -179,6 +191,16 @@ export const createConfStore = (labelStore: LabelsStore): ConfStore => {
 		setName: (name: string) => {
 			if (name === '') return;
 			set({ ...get({ subscribe }), name, lastModified: Date.now() });
+			syncOpenToAll();
+			record();
+		},
+		setLocked: (locked: boolean) => {
+			update((prev) => ({ ...prev, locked, lastModified: Date.now() }));
+			syncOpenToAll();
+			record();
+		},
+		setVerifyConf: (verifyConf: VerifyConf) => {
+			update((prev) => ({ ...prev, verifyConf, lastModified: Date.now() }));
 			syncOpenToAll();
 			record();
 		},

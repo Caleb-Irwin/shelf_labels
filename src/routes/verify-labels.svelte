@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { labelStore } from '$lib/labelStore';
+	import { confStore, labelStore } from '$lib/labelStore';
 	import { autoFilter, calcPercentChange } from '$lib/verifyUtils';
 	import SvgLabel from '$lib/SvgLabel.svelte';
 	import EditItem from '$lib/editItem.svelte';
@@ -21,6 +21,7 @@
 		index = 0,
 		results: { id: number; passed: boolean }[] = [],
 		editMode = false,
+		currentSetId = '',
 		labelPreviewHolder,
 		width: number;
 
@@ -61,39 +62,56 @@
 	];
 	$: compBarWidth = width - 60 || 0;
 
-	onMount(() => {
-		const conf = JSON.parse(localStorage.getItem('verifyConf'));
-		if (conf) {
-			active = true;
-			index = conf.index;
-			autoFilterNegative = conf.autoFilterNegative;
-			autoFilterPositive = conf.autoFilterPositive;
-			results = conf.results;
+	$: {
+		if (currentSetId !== $confStore.id) {
+			const conf = $confStore.verifyConf;
+			if (conf) {
+				active = true;
+				index = conf.index;
+				autoFilterNegative = conf.autoFilterNegative;
+				autoFilterPositive = conf.autoFilterPositive;
+				results = conf.results;
+			} else {
+				active = false;
+				results = [];
+				index = 0;
+			}
+			currentSetId = $confStore.id;
 		}
-	});
+	}
+
+	const recordConf = () => {
+		confStore.setVerifyConf({ index, autoFilterPositive, autoFilterNegative, results });
+	};
 
 	const start = () => {
 		active = true;
 		index = 0;
-		localStorage.setItem(
-			'verifyConf',
-			JSON.stringify({ index, autoFilterPositive, autoFilterNegative, results })
-		);
+		confStore.setLocked(true);
+		recordConf();
 	};
 	const cancel = () => {
 		active = false;
 		results = [];
 		index = 0;
-		localStorage.removeItem('verifyConf');
+		confStore.setVerifyConf(undefined);
+		confStore.setLocked(false);
 	};
 	const finish = () => {
-		labelStore.set([
+		confStore.createLabelSet(
+			'🗙 ' + $confStore.name,
+			sorted.failed.filter((l) => {
+				return !results.find((r) => r.id === l.id).passed;
+			})
+		);
+		const id = confStore.createLabelSet('✔ ' + $confStore.name, [
 			...sorted.passed,
 			...sorted.failed.filter((l) => {
 				return results.find((r) => r.id === l.id).passed;
 			})
-		]);
-		localStorage.setItem('labels', JSON.stringify(get(labelStore)));
+		]).id;
+		confStore.setName('✔+🗙 ' + $confStore.name);
+		confStore.changeOpenLabelSet(id);
 		cancel();
 		goto('/labels');
 	};
@@ -106,30 +124,21 @@
 		results.pop();
 		results = results;
 		index--;
-		localStorage.setItem(
-			'verifyConf',
-			JSON.stringify({ index, autoFilterPositive, autoFilterNegative, results })
-		);
+		recordConf();
 	};
 	const pass = () => {
 		editMode = false;
 		results.push({ id: currentLabel.id, passed: true });
 		results = results;
 		index++;
-		localStorage.setItem(
-			'verifyConf',
-			JSON.stringify({ index, autoFilterPositive, autoFilterNegative, results })
-		);
+		recordConf();
 	};
 	const fail = () => {
 		editMode = false;
 		results.push({ id: currentLabel.id, passed: false });
 		results = results;
 		index++;
-		localStorage.setItem(
-			'verifyConf',
-			JSON.stringify({ index, autoFilterPositive, autoFilterNegative, results })
-		);
+		recordConf();
 	};
 	const handleKeydown = (event) => {
 		if (editMode) return;
