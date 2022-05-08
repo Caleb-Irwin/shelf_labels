@@ -5,7 +5,7 @@
 </script>
 
 <Header />
-<main>
+<main class="mt-16 mb-12">
 	<slot />
 </main>
 <Footer />
@@ -17,7 +17,6 @@
 		flex-direction: column;
 		padding: 1rem;
 		width: 100%;
-		margin: 0 auto;
 		box-sizing: border-box;
 	}
 </style>

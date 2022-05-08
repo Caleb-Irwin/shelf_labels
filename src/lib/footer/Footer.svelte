@@ -1,19 +1,14 @@
 <script lang="ts">
 	import { browser } from '$app/env';
-	import { afterNavigate } from '$app/navigation';
-
-	import { labelStore, confStore } from '$lib/labelStore';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 
-	let open;
+	import { labelStore, confStore } from '$lib/labelStore';
+
+	$: open = $confStore.id;
 	$: {
 		if (browser && open) confStore.changeOpenLabelSet(open, labelStore);
 	}
-
-	afterNavigate(() => {
-		open = $confStore.id;
-	});
 
 	const rename = () => {
 		const newName = prompt('Rename', get(confStore).name);
@@ -23,18 +18,16 @@
 	const del = () => {
 		if (confirm("Are you sure you want to delete this label set? \n⚠️ This can't be undone")) {
 			confStore.deleteLabelSet($confStore.id, labelStore);
-			open = $confStore.id;
 		}
 	};
 	const create = () => {
 		let name = prompt('Name', 'Untitled Label Set ' + ($confStore.allLabelSets.length + 1));
 		if (name === '') name = 'Untitled';
-		confStore.createLabelSet(name);
+		confStore.changeOpenLabelSet(confStore.createLabelSet(name).id, labelStore);
 	};
 	onMount(() => {
 		if (browser) {
 			confStore.init(labelStore);
-			open = $confStore.id;
 		}
 	});
 
@@ -54,6 +47,10 @@
 		id="label-set"
 		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md"
 		bind:value={open}
+		on:change={(e) => {
+			// @ts-expect-error no type for event
+			confStore.changeOpenLabelSet(e.target.value, labelStore);
+		}}
 	>
 		{#each $confStore.allLabelSets as labelSet}
 			<option value={labelSet.id}
