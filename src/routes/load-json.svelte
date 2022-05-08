@@ -33,12 +33,10 @@
 					console.log(l);
 					return false;
 				});
-			confStore.changeOpenLabelSet(
-				confStore.createLabelSet(
-					'Imported Label Set ' + ($confStore.allLabelSets.length + 1),
-					labels
-				).id,
-				labelStore
+			confStore.createLabelSet(
+				'Imported Label Set ' + ($confStore.allLabelSets.length + 1),
+				labels,
+				true
 			);
 			goto('/labels');
 		} catch (e) {

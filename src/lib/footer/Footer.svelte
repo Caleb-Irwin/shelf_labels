@@ -7,7 +7,7 @@
 
 	$: open = $confStore.id;
 	$: {
-		if (browser && open) confStore.changeOpenLabelSet(open, labelStore);
+		if (browser && open) confStore.changeOpenLabelSet(open);
 	}
 
 	const rename = () => {
@@ -17,17 +17,17 @@
 	};
 	const del = () => {
 		if (confirm("Are you sure you want to delete this label set? \n⚠️ This can't be undone")) {
-			confStore.deleteLabelSet($confStore.id, labelStore);
+			confStore.deleteLabelSet($confStore.id);
 		}
 	};
 	const create = () => {
 		let name = prompt('Name', 'Untitled Label Set ' + ($confStore.allLabelSets.length + 1));
 		if (name === '') name = 'Untitled';
-		confStore.changeOpenLabelSet(confStore.createLabelSet(name).id, labelStore);
+		confStore.createLabelSet(name, undefined, true);
 	};
 	onMount(() => {
 		if (browser) {
-			confStore.init(labelStore);
+			confStore.init();
 		}
 	});
 

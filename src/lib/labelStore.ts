@@ -25,11 +25,11 @@ interface LabelsStore extends Readable<Label[]> {
 }
 
 interface ConfStore extends Readable<AppConf> {
-	init: (labelStore: LabelsStore) => void;
+	init: () => void;
 	setName: (name: string) => void;
-	createLabelSet: (name: string, labels?: Label[]) => LabelSet;
-	deleteLabelSet: (id: string, labelStore: LabelsStore) => void;
-	changeOpenLabelSet: (id: string, labelStore: LabelsStore) => void;
+	createLabelSet: (name: string, labels?: Label[], switchToCreated?: boolean) => LabelSet;
+	deleteLabelSet: (id: string) => void;
+	changeOpenLabelSet: (id: string) => void;
 }
 
 export const customLabelStore = (): LabelsStore => {
@@ -81,7 +81,7 @@ export const customLabelStore = (): LabelsStore => {
 	};
 };
 
-export const createConfStore = (): ConfStore => {
+export const createConfStore = (labelStore: LabelsStore): ConfStore => {
 	const { subscribe, set, update } = writable<AppConf>({
 		id: '',
 		name: 'Loading...',
@@ -111,7 +111,8 @@ export const createConfStore = (): ConfStore => {
 
 	const createLabelSet = (
 		name: string,
-		labels: Label[] = [{ id: 0, name: '', barcode: '', price: 0 }]
+		labels: Label[] = [{ id: 0, name: '', barcode: '', price: 0 }],
+		switchToCreated = false
 	) => {
 		const labelSet: LabelSet = {
 			id: nanoid(),
@@ -126,9 +127,10 @@ export const createConfStore = (): ConfStore => {
 		});
 		syncOpenToAll();
 		record();
+		if (switchToCreated) changeOpenLabelSet(labelSet.id);
 		return labelSet;
 	};
-	const changeOpenLabelSet = (id: string, labelStore: LabelsStore) => {
+	const changeOpenLabelSet = (id: string) => {
 		syncOpenToAll();
 		const setIndex = getLabelSetIndexById(id);
 		if (setIndex === -1) {
@@ -152,7 +154,7 @@ export const createConfStore = (): ConfStore => {
 		record();
 	};
 	return {
-		init: (labelStore: LabelsStore) => {
+		init: () => {
 			const prev = localStorage.getItem('conf');
 			const labels = JSON.parse(localStorage.getItem('labels') || 'null') ?? [
 				{ id: 0, name: '', barcode: '', price: 0 }
@@ -181,14 +183,13 @@ export const createConfStore = (): ConfStore => {
 			record();
 		},
 		createLabelSet,
-		deleteLabelSet: (id: string, labelStore: LabelsStore) => {
+		deleteLabelSet: (id: string) => {
 			const last = get({ subscribe });
 			if (last.allLabelSets.length === 1) {
-				changeOpenLabelSet(createLabelSet('Untitled Label Set 1').id, labelStore);
+				changeOpenLabelSet(createLabelSet('Untitled Label Set 1').id);
 			} else {
 				changeOpenLabelSet(
-					last.allLabelSets[0].id === id ? last.allLabelSets[1].id : last.allLabelSets[0].id,
-					labelStore
+					last.allLabelSets[0].id === id ? last.allLabelSets[1].id : last.allLabelSets[0].id
 				);
 			}
 			update((prev) => {
@@ -203,5 +204,5 @@ export const createConfStore = (): ConfStore => {
 	};
 };
 
-export const confStore = createConfStore();
 export const labelStore = customLabelStore();
+export const confStore = createConfStore(labelStore);

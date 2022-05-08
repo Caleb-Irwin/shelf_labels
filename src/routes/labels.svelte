@@ -9,7 +9,6 @@
 	import EditItem from '$lib/editItem.svelte';
 	import { get } from 'svelte/store';
 
-	let loaded = false;
 	let verifyHappening = false;
 
 	$: tags = divideArray($labelStore, 30);
@@ -27,7 +26,6 @@
 	};
 
 	onMount(() => {
-		loaded = true;
 		loadBarcodes();
 		if (browser && localStorage.getItem('verifyConf')) {
 			verifyHappening = true;

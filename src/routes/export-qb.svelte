@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/env';
 	import { get } from 'svelte/store';
 
 	import { labelStore } from '$lib/labelStore';
