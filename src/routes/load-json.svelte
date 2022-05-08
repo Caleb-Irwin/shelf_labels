@@ -6,9 +6,11 @@
 
 	let files: FileList,
 		json = '',
+		fileName = '',
 		verifyHappening = false;
 	$: {
 		if (browser && files && files[0]) {
+			fileName = files[0].name;
 			const reader = new FileReader();
 			reader.onload = (ev) => {
 				json = ev.target.result as string;
@@ -34,7 +36,7 @@
 					return false;
 				});
 			confStore.createLabelSet(
-				'Imported Label Set ' + ($confStore.allLabelSets.length + 1),
+				`${fileName.slice(0, fileName.indexOf('.'))} (${$confStore.allLabelSets.length + 1})`,
 				labels,
 				true
 			);

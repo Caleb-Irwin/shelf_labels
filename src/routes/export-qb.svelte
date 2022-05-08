@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
 
-	import { labelStore } from '$lib/labelStore';
+	import { confStore, labelStore } from '$lib/labelStore';
 
 	function escapeComma(str: string): string {
 		return str.includes(',') ? `"${str}"` : str;
@@ -82,9 +82,9 @@
 		on:click={() =>
 			downloadLabelsAsCSV(
 				get(labelStore),
-				`quickbooks-export-${new Date()
+				`${$confStore.name} (qb-${new Date()
 					.toISOString()
-					.substring(0, new Date().toISOString().indexOf('T'))}`
+					.substring(0, new Date().toISOString().indexOf('T'))})`
 			)}>Download Change CSV</button
 	>
 	<button
@@ -92,9 +92,9 @@
 		on:click={() =>
 			downloadLabelsAsCSV(
 				get(labelStore),
-				`quickbooks-export-revert-${new Date()
+				`${$confStore.name} (qb-revert-${new Date()
 					.toISOString()
-					.substring(0, new Date().toISOString().indexOf('T'))}`,
+					.substring(0, new Date().toISOString().indexOf('T'))})`,
 				true
 			)}>Download Revert CSV</button
 	>

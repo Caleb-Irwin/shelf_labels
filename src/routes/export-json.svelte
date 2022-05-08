@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get } from 'svelte/store';
 
-	import { labelStore } from '$lib/labelStore';
+	import { confStore, labelStore } from '$lib/labelStore';
 
 	function downloadObjectAsJson<T extends object>(exportObj: T, exportName: string) {
 		const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
@@ -26,6 +26,12 @@
 <div class="flex p-2 justify-center">
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
-		on:click={() => downloadObjectAsJson(get(labelStore), 'labels')}>Download JSON</button
+		on:click={() =>
+			downloadObjectAsJson(
+				get(labelStore),
+				`${$confStore.name} (${new Date()
+					.toISOString()
+					.substring(0, new Date().toISOString().indexOf('T'))})`
+			)}>Download JSON</button
 	>
 </div>
