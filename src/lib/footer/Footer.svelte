@@ -39,13 +39,13 @@
 </script>
 
 <footer
-	class="fixed inset-x-0 bottom-0 bg-white flex align-middle justify-center space-x-1 shadow-[0_-10px_15px_-3px_rgb(0_0_0_/_0.1),_0_4px_6px_-4px_rgb(0_0_0_/_0.1)] p-3 mt-2"
+	class="fixed inset-x-0 bottom-0 bg-white flex flex-col md:flex-row align-middle justify-center space-x-1 space-y-1 shadow-[0_-10px_15px_-3px_rgb(0_0_0_/_0.1),_0_4px_6px_-4px_rgb(0_0_0_/_0.1)] p-2 mt-2"
 >
-	<label for="label-set" class="flex items-center text-gray-700">Label Set:</label>
+	<label for="label-set" class="items-center text-gray-700 hidden md:flex">Label Set:</label>
 	<select
 		name="Label Set"
 		id="label-set"
-		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md"
+		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md h-7"
 		bind:value={open}
 		on:change={(e) => {
 			// @ts-expect-error no type for event
@@ -62,22 +62,24 @@
 			>
 		{/each}
 	</select>
-	<button
-		on:click={rename}
-		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-gray-200"
-		>Rename</button
-	>
-	<button
-		on:click={del}
-		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-red-400"
-		>Delete</button
-	>
-	<button
-		on:click={create}
-		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-green-400"
-		>New</button
-	>
-	<p class="text-center text-gray-700 pl-4">
+	<div class="flex justify-center space-x-1">
+		<button
+			on:click={rename}
+			class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-gray-200 flex-grow md:flex-grow-0"
+			>Rename</button
+		>
+		<button
+			on:click={del}
+			class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-red-400 flex-grow md:flex-grow-0"
+			>Delete</button
+		>
+		<button
+			on:click={create}
+			class="text-gray-700 border-2 border-solid border-gray-500 rounded-md px-1 hover:bg-green-400 flex-grow md:flex-grow-0"
+			>New</button
+		>
+	</div>
+	<p class="text-center text-gray-700 md:pl-2">
 		Made by <a
 			class="underline"
 			href="http://calebirwin.ca/"
