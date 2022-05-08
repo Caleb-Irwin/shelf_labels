@@ -1,7 +1,7 @@
 import { writable, get, type Readable } from 'svelte/store';
 
 interface LabelsStore extends Readable<Label[]> {
-	set: (tags: LabelSimple[]) => void;
+	set: (labels: LabelSimple[]) => void;
 	update: (id: number, label: Label | LabelSimple) => void;
 	new: (label?: LabelSimple, prepend?: boolean) => void;
 	delete: (id: number) => void;
@@ -11,8 +11,8 @@ interface LabelsStore extends Readable<Label[]> {
 export const customLabelStore = (): LabelsStore => {
 	const { subscribe, set, update } = writable<Label[]>([]);
 	return {
-		set: (tags: LabelSimple[]) => {
-			set(tags.map((t, i) => ({ ...t, id: i })));
+		set: (labels: LabelSimple[]) => {
+			set(labels.map((t, i) => ({ ...t, id: i })));
 		},
 		update: (id: number, label: LabelSimple | Label) => {
 			update((s) => {
@@ -29,18 +29,18 @@ export const customLabelStore = (): LabelsStore => {
 					price: 0
 				};
 			}
-			update((tags) => {
+			update((labels: Label[]) => {
 				if (prepend) {
-					tags.unshift({ ...label, id: 0 });
-					tags = tags.map((t, i): Label => ({ ...t, id: i }));
+					labels.unshift({ ...label, id: 0 });
+					labels = labels.map((t, i): Label => ({ ...t, id: i }));
 				} else {
-					tags.push({ ...label, id: tags.length });
+					labels.push({ ...label, id: labels.length });
 				}
-				return tags;
+				return labels;
 			});
 		},
 		delete: (id: number) => {
-			update((tags) => tags.filter((t) => t.id !== id));
+			update((labels: Label[]) => labels.filter((t) => t.id !== id));
 		},
 		getTag: (id: number) => {
 			return get(labelStore)[id];
