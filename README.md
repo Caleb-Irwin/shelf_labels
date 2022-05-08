@@ -1,4 +1,4 @@
-# Shelf Tags
+# Shelf Labels
 
 See index for features.
 Demo: [shelf.calebirwin.ca](https://shelf.calebirwin.ca/)
