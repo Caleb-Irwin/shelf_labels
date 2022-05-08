@@ -2,10 +2,10 @@
 	import { browser } from '$app/env';
 	import { get } from 'svelte/store';
 
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 
 	if (browser && localStorage.getItem('labels')) {
-		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+		labelStore.set(JSON.parse(localStorage.getItem('labels')));
 	}
 
 	function escapeComma(str: string): string {
@@ -86,7 +86,7 @@
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
 		on:click={() =>
 			downloadLabelsAsCSV(
-				get(tagsStore),
+				get(labelStore),
 				`quickbooks-export-${new Date()
 					.toISOString()
 					.substring(0, new Date().toISOString().indexOf('T'))}`
@@ -96,7 +96,7 @@
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
 		on:click={() =>
 			downloadLabelsAsCSV(
-				get(tagsStore),
+				get(labelStore),
 				`quickbooks-export-revert-${new Date()
 					.toISOString()
 					.substring(0, new Date().toISOString().indexOf('T'))}`,

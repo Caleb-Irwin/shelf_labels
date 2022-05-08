@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 	import { autoFilter, calcPercentChange } from '$lib/verifyUtils';
 	import SvgLabel from '$lib/SvgLabel.svelte';
 	import EditItem from '$lib/editItem.svelte';
@@ -24,7 +24,7 @@
 		labelPreviewHolder,
 		width: number;
 
-	$: sorted = autoFilter($tagsStore, autoFilterPositive, autoFilterNegative);
+	$: sorted = autoFilter($labelStore, autoFilterPositive, autoFilterNegative);
 	$: currentLabel = disableDecide ? undefined : sorted.failed[index];
 	$: currentChangePercent = currentLabel && calcPercentChange(currentLabel);
 	$: {
@@ -62,7 +62,7 @@
 	$: compBarWidth = width - 60 || 0;
 
 	onMount(() => {
-		tagsStore.set(JSON.parse(localStorage.getItem('labels')) || []);
+		labelStore.set(JSON.parse(localStorage.getItem('labels')) || []);
 		const conf = JSON.parse(localStorage.getItem('verifyConf'));
 		if (conf) {
 			active = true;
@@ -88,13 +88,13 @@
 		localStorage.removeItem('verifyConf');
 	};
 	const finish = () => {
-		tagsStore.set([
+		labelStore.set([
 			...sorted.passed,
 			...sorted.failed.filter((l) => {
 				return results.find((r) => r.id === l.id).passed;
 			})
 		]);
-		localStorage.setItem('labels', JSON.stringify(get(tagsStore)));
+		localStorage.setItem('labels', JSON.stringify(get(labelStore)));
 		cancel();
 		goto('/labels');
 	};
@@ -194,10 +194,10 @@
 	<button class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white" on:click={toggle}
 		>{active ? 'Cancel' : 'Start'}</button
 	>
-	<b>Auto Verifyed (of total): {sorted.passed.length}/{$tagsStore.length}</b>
+	<b>Auto Verifyed (of total): {sorted.passed.length}/{$labelStore.length}</b>
 </div>
 
-{#if active && $tagsStore.length > 0}
+{#if active && $labelStore.length > 0}
 	<div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white text-center">
 		<ProgressBar
 			{series}
@@ -265,19 +265,19 @@
 					tagId={currentLabel.id}
 					closeFunc={() => {
 						editMode = false;
-						localStorage.setItem('labels', JSON.stringify(get(tagsStore)));
+						localStorage.setItem('labels', JSON.stringify(get(labelStore)));
 					}}
 				/>
 			{/if}
 		{:else}
 			<h2 class="text-2xl text-black">Stats</h2>
-			<p class="text-black text-md">Auto Verifyed: {sorted.passed.length}/{$tagsStore.length}</p>
+			<p class="text-black text-md">Auto Verifyed: {sorted.passed.length}/{$labelStore.length}</p>
 			<p class="text-black text-md">
 				Manually Verifyed: {totalManualPassed}/{sorted.failed.length}
 			</p>
 			<p class="text-black text-md">Manually Failed: {totalManualFailed}/{sorted.failed.length}</p>
 			<p class="text-black text-md">
-				Passed: {sorted.passed.length + totalManualPassed}/{$tagsStore.length}
+				Passed: {sorted.passed.length + totalManualPassed}/{$labelStore.length}
 			</p>
 			<div>
 				<button

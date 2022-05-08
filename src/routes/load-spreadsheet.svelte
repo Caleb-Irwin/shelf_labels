@@ -2,7 +2,7 @@
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { readGuild } from '$lib/parseXlsx';
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 
 	let files: FileList;
 	let labelsFromFile: Label[] = [];
@@ -34,7 +34,7 @@
 				alert('Item failed validation: ' + JSON.stringify(l));
 				return false;
 			});
-			tagsStore.set(labels);
+			labelStore.set(labels);
 			goto('/labels?import=' + (Date.now() + 5000));
 		} catch (e) {
 			console.log(e);

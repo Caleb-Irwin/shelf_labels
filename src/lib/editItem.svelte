@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 
 	export let tagId: number, closeFunc: () => void;
 	let price: number,
@@ -10,7 +10,7 @@
 		lastPrice: number,
 		originalId = -1,
 		editExtraFeilds: boolean = false;
-	$: tag = tagsStore.getTag(tagId);
+	$: tag = labelStore.getTag(tagId);
 	$: {
 		if (tagId !== originalId) {
 			price = tag.price;
@@ -98,7 +98,7 @@
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black"
 			on:click={() => {
-				tagsStore.delete(tagId);
+				labelStore.delete(tagId);
 				closeFunc();
 			}}>🗑 Delete Tag</button
 		>
@@ -112,7 +112,7 @@
 					alert('Invalid price!');
 					return;
 				}
-				tagsStore.update(tagId, {
+				labelStore.update(tagId, {
 					...tag,
 					name,
 					price,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 	import { onMount } from 'svelte';
 
 	let files: FileList,
@@ -33,7 +33,7 @@
 					console.log(l);
 					return false;
 				});
-			tagsStore.set(labels);
+			labelStore.set(labels);
 			goto('/labels?import=' + (Date.now() + 5000));
 		} catch (e) {
 			console.log(e);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 	import JsBarcode from 'jsbarcode';
 	import { onMount } from 'svelte';
 	import divideArray from '$lib/divideArray';
@@ -12,7 +12,7 @@
 	let loaded = false;
 	let verifyHappening = false;
 
-	$: tags = divideArray($tagsStore, 30);
+	$: tags = divideArray($labelStore, 30);
 	const loadBarcodes = async (noStore = false) => {
 		console.log('loading barcodes');
 
@@ -26,7 +26,7 @@
 		});
 		if (browser && loaded && !noStore) {
 			console.log('storing!');
-			localStorage.setItem('labels', JSON.stringify(get(tagsStore)));
+			localStorage.setItem('labels', JSON.stringify(get(labelStore)));
 		}
 	};
 
@@ -40,7 +40,7 @@
 			localStorage.getItem('labels')
 		) {
 			console.log('loading!');
-			tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+			labelStore.set(JSON.parse(localStorage.getItem('labels')));
 		}
 		loaded = true;
 		loadBarcodes();
@@ -68,9 +68,9 @@
 			let s: string[] = [];
 			const prevOffset = pageOffset;
 			pageOffset = 0;
-			while (pageOffset <= Math.ceil($tagsStore.length / 30 / 4) - 1) {
+			while (pageOffset <= Math.ceil($labelStore.length / 30 / 4) - 1) {
 				if (
-					Math.ceil($tagsStore.length / 30 / 4) !== 1 &&
+					Math.ceil($labelStore.length / 30 / 4) !== 1 &&
 					!(pageOffset === 0 && prevOffset === 0)
 				) {
 					await wait(3000);
@@ -89,7 +89,7 @@
 					svgEl.setAttribute('height', '');
 					s.push(svgStr);
 				}
-				if (pageOffset === Math.ceil($tagsStore.length / 30 / 4) - 1) break;
+				if (pageOffset === Math.ceil($labelStore.length / 30 / 4) - 1) break;
 				pageOffset++;
 			}
 			startTime = Date.now();
@@ -127,10 +127,10 @@
 <h1>Labels</h1>
 <div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
 	<b
-		>{$tagsStore.length} label{$tagsStore.length !== 1 ? 's' : ''}, {Math.ceil(
-			$tagsStore.length / 30
+		>{$labelStore.length} label{$labelStore.length !== 1 ? 's' : ''}, {Math.ceil(
+			$labelStore.length / 30
 		)}
-		total page{Math.ceil($tagsStore.length / 30) !== 1 ? 's' : ''} (at 30 labels per page)</b
+		total page{Math.ceil($labelStore.length / 30) !== 1 ? 's' : ''} (at 30 labels per page)</b
 	>
 	<br />
 	<label for="Height">Auxiliary Text</label>
@@ -157,8 +157,8 @@
 			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
 			disabled={verifyHappening}
 			on:click={() => {
-				tagsStore.set([]);
-				tagsStore.new();
+				labelStore.set([]);
+				labelStore.new();
 				setTimeout(loadBarcodes);
 			}}>Delete/Clear All Labels</button
 		>
@@ -189,7 +189,7 @@
 			<button
 				class="rounded-md border-2 p-0.5 px-2 border-black"
 				on:click={() => {
-					tagsStore.new(null, true);
+					labelStore.new(null, true);
 					setTimeout(loadBarcodes);
 					tagOpen = 0;
 				}}>Add New Tag at Beginning</button
@@ -197,9 +197,9 @@
 			<button
 				class="rounded-md border-2 p-0.5 px-2 border-black"
 				on:click={() => {
-					tagsStore.new(null);
+					labelStore.new(null);
 					setTimeout(loadBarcodes);
-					tagOpen = get(tagsStore).length - 1;
+					tagOpen = get(labelStore).length - 1;
 				}}>Add New Tag at End</button
 			>
 		</div>
@@ -224,10 +224,10 @@
 		on:click={() => pageOffset--}>Previous Group</button
 	>
 	<p class="text-black p-1 m-2">
-		Group {pageOffset + 1} of {Math.ceil($tagsStore.length / 30 / 4)}
+		Group {pageOffset + 1} of {Math.ceil($labelStore.length / 30 / 4)}
 	</p>
 	<button
-		disabled={loading || pageOffset >= Math.ceil($tagsStore.length / 30 / 4) - 1}
+		disabled={loading || pageOffset >= Math.ceil($labelStore.length / 30 / 4) - 1}
 		class="bg-slate-50 rounded-lg p-1 m-2 disabled:bg-slate-200 disabled:cursor-not-allowed"
 		on:click={() => pageOffset++}>Next Group</button
 	>

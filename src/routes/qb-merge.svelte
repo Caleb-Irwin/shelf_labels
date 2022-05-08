@@ -1,12 +1,12 @@
 <script lang="ts">
 	// Not used yet (maybe never)
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 
 	import { onMount } from 'svelte';
 	import { browser } from '$app/env';
 
 	onMount(() => {
-		tagsStore.set(JSON.parse(localStorage.getItem('labels')) || []);
+		labelStore.set(JSON.parse(localStorage.getItem('labels')) || []);
 	});
 
 	let files: FileList;

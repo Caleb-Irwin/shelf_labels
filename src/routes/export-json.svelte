@@ -2,11 +2,11 @@
 	import { browser } from '$app/env';
 	import { get } from 'svelte/store';
 
-	import { tagsStore } from '$lib/tagsStore';
+	import { labelStore } from '$lib/labelStore';
 
 	if (browser && localStorage.getItem('labels')) {
 		console.log('loading!');
-		tagsStore.set(JSON.parse(localStorage.getItem('labels')));
+		labelStore.set(JSON.parse(localStorage.getItem('labels')));
 	}
 
 	function downloadObjectAsJson<T extends object>(exportObj: T, exportName: string) {
@@ -32,6 +32,6 @@
 <div class="flex p-2 justify-center">
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
-		on:click={() => downloadObjectAsJson(get(tagsStore), 'labels')}>Download JSON</button
+		on:click={() => downloadObjectAsJson(get(labelStore), 'labels')}>Download JSON</button
 	>
 </div>
