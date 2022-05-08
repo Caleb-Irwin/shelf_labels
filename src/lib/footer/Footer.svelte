@@ -56,9 +56,9 @@
 	>
 		{#each $confStore.allLabelSets as labelSet}
 			<option value={labelSet.id}
-				>{labelSet.name} ({labelSet.id === $confStore.id
-					? 'Now'
-					: formattedDate(new Date(labelSet.lastModified))}; {labelSet.id === $confStore.id
+				>{labelSet.name} ({$confStore.locked ? '🔒' : ''}
+				{labelSet.id === $confStore.id ? 'Now' : formattedDate(new Date(labelSet.lastModified))}; {labelSet.id ===
+				$confStore.id
 					? $labelStore.length
 					: labelSet.labels.length} Labels)</option
 			>

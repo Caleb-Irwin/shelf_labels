@@ -93,6 +93,7 @@
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
 	$: labelSetLocked = $confStore.id ? $confStore.locked : false;
+	$: setBeingVerfifyed = $confStore.id ? $confStore.verifyConf !== undefined : false;
 	$: editMode = !labelSetLocked;
 
 	let loading = false,
@@ -137,17 +138,25 @@
 			disabled={labelSetLocked}
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
 		>
+		<button
+			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
+			disabled={setBeingVerfifyed}
+			on:click={() => confStore.setLocked(!$confStore.locked)}
+			>{labelSetLocked ? 'Unlock' : 'Lock'}</button
+		>
 		<button class="rounded-md border-2 p-0.5 px-2 border-black" on:click={() => loadBarcodes()}
 			>Rerender Barcodes</button
 		>
 	</div>
-	{#if labelSetLocked}
+	{#if setBeingVerfifyed}
 		<p class="text-red-600">
 			Label set is being verifyed. Editing is disabled. Finish or cancel it <a
 				class="underline text-red-600"
 				href="/verify-labels">here</a
 			>.
 		</p>
+	{:else if labelSetLocked}
+		<p class="text-red-600">Label set is locked. You can unlock it above.</p>
 	{/if}
 </div>
 
