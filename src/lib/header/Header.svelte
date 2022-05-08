@@ -4,7 +4,7 @@
 	let menuOpen = false;
 </script>
 
-<nav class="bg-white shadow-lg">
+<nav class="fixed inset-x-0 top-0 bg-white shadow-lg">
 	<div class="max-w-6xl mx-auto px-4">
 		<div class="flex justify-between">
 			<div class="flex flex-grow justify-center">

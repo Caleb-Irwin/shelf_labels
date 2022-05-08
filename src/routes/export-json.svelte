@@ -4,11 +4,6 @@
 
 	import { labelStore } from '$lib/labelStore';
 
-	if (browser && localStorage.getItem('labels')) {
-		console.log('loading!');
-		labelStore.set(JSON.parse(localStorage.getItem('labels')));
-	}
-
 	function downloadObjectAsJson<T extends object>(exportObj: T, exportName: string) {
 		const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
 		const downloadAnchorNode = document.createElement('a');

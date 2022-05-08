@@ -4,10 +4,6 @@
 
 	import { labelStore } from '$lib/labelStore';
 
-	if (browser && localStorage.getItem('labels')) {
-		labelStore.set(JSON.parse(localStorage.getItem('labels')));
-	}
-
 	function escapeComma(str: string): string {
 		return str.includes(',') ? `"${str}"` : str;
 	}

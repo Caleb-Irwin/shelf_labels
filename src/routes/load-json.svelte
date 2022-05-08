@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import { labelStore } from '$lib/labelStore';
+	import { labelStore, confStore } from '$lib/labelStore';
 	import { onMount } from 'svelte';
 
 	let files: FileList,
@@ -33,8 +33,14 @@
 					console.log(l);
 					return false;
 				});
-			labelStore.set(labels);
-			goto('/labels?import=' + (Date.now() + 5000));
+			confStore.changeOpenLabelSet(
+				confStore.createLabelSet(
+					'Imported Label Set ' + ($confStore.allLabelSets.length + 1),
+					labels
+				).id,
+				labelStore
+			);
+			goto('/labels');
 		} catch (e) {
 			console.log(e);
 			alert('Try agian! Error = ' + e);

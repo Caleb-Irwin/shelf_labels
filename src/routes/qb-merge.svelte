@@ -5,10 +5,6 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/env';
 
-	onMount(() => {
-		labelStore.set(JSON.parse(localStorage.getItem('labels')) || []);
-	});
-
 	let files: FileList;
 	let qbExport: string;
 	$: {

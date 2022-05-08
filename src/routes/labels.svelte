@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { labelStore } from '$lib/labelStore';
+	import { labelStore, confStore } from '$lib/labelStore';
 	import JsBarcode from 'jsbarcode';
 	import { onMount } from 'svelte';
 	import divideArray from '$lib/divideArray';
@@ -24,24 +24,9 @@
 				).innerHTML;
 			}
 		});
-		if (browser && loaded && !noStore) {
-			console.log('storing!');
-			localStorage.setItem('labels', JSON.stringify(get(labelStore)));
-		}
 	};
 
 	onMount(() => {
-		if (
-			browser &&
-			!(
-				window.location.search.startsWith('?import=') &&
-				parseInt(window.location.search.slice(8)) > Date.now()
-			) &&
-			localStorage.getItem('labels')
-		) {
-			console.log('loading!');
-			labelStore.set(JSON.parse(localStorage.getItem('labels')));
-		}
 		loaded = true;
 		loadBarcodes();
 		if (browser && localStorage.getItem('verifyConf')) {
@@ -111,6 +96,7 @@
 	};
 	$: {
 		pageOffset;
+		$confStore.id;
 		if (browser) setTimeout(() => loadBarcodes(true), 0);
 	}
 
@@ -153,15 +139,6 @@
 	{#if loading && nd !== 0}Finished {nd} of {td} Pages ({Math.round(timePerPage * 100) / 100}s/page)
 	{:else if loading}Capturing...{/if}
 	<div>
-		<button
-			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
-			disabled={verifyHappening}
-			on:click={() => {
-				labelStore.set([]);
-				labelStore.new();
-				setTimeout(loadBarcodes);
-			}}>Delete/Clear All Labels</button
-		>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
 			disabled={verifyHappening}

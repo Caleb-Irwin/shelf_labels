@@ -62,7 +62,6 @@
 	$: compBarWidth = width - 60 || 0;
 
 	onMount(() => {
-		labelStore.set(JSON.parse(localStorage.getItem('labels')) || []);
 		const conf = JSON.parse(localStorage.getItem('verifyConf'));
 		if (conf) {
 			active = true;
