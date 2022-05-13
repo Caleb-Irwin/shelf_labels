@@ -5,7 +5,7 @@
 </script>
 
 <Header />
-<main class="mt-16 mb-12">
+<main class="mt-16 mb-28 md:mb-12">
 	<slot />
 </main>
 <Footer />
