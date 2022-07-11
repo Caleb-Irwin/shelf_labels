@@ -8,6 +8,7 @@
 		qbAccount: string,
 		qbName: string,
 		lastPrice: number,
+		noPrint: boolean,
 		originalId = -1,
 		editExtraFeilds: boolean = false;
 	$: tag = labelStore.getTag(tagId);
@@ -19,6 +20,7 @@
 			qbAccount = tag.qbAccount;
 			qbName = tag.qbName;
 			lastPrice = tag.lastPrice;
+			noPrint = tag.noPrint;
 			originalId = tagId;
 		}
 	}
@@ -27,6 +29,7 @@
 		if (lastPrice === 0 || isNaN(lastPrice)) lastPrice = undefined;
 		if (qbAccount === '') qbAccount = undefined;
 		if (qbName === '') qbName = undefined;
+		if (noPrint === undefined) noPrint = false;
 	}
 </script>
 
@@ -93,6 +96,8 @@
 			bind:value={lastPrice}
 			class="bg-slate-300 p-1 text-center placeholder:text-gray-600"
 		/>
+		<label for="noPrint">Do Not Print</label>
+		<input type="checkbox" name="noPrint" id="" bind:checked={noPrint} />
 	{/if}
 	<div class="mt-2">
 		<button
@@ -119,7 +124,8 @@
 					barcode,
 					qbAccount,
 					qbName,
-					lastPrice
+					lastPrice,
+					noPrint
 				});
 				closeFunc();
 			}}>💾 Save Tag*</button
