@@ -9,7 +9,14 @@
 	import EditItem from '$lib/editItem.svelte';
 	import { get } from 'svelte/store';
 
-	$: tags = divideArray($labelStore, 30);
+	$: tags = divideArray(
+		$labelStore.filter((v) => {
+			return includeNoPrint || !v.noPrint;
+		}),
+		30
+	);
+	$: tagsFlatLength = tags.flat().length;
+	$: noPrintLength = $labelStore.filter((v) => v.noPrint).length;
 	const loadBarcodes = async () => {
 		console.log('loading barcodes');
 		JsBarcode('.barcode-svg').init();
@@ -30,6 +37,7 @@
 		sf = 3,
 		nd = 0,
 		td = 0,
+		includeNoPrint = false,
 		pageOffset = 0,
 		startTime = Date.now(),
 		month = (new Date().getMonth() + 1).toString(),
@@ -107,10 +115,13 @@
 <h1>Labels</h1>
 <div class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white grid text-center">
 	<b
-		>{$labelStore.length} label{$labelStore.length !== 1 ? 's' : ''}, {Math.ceil(
-			$labelStore.length / 30
-		)}
-		total page{Math.ceil($labelStore.length / 30) !== 1 ? 's' : ''} (at 30 labels per page)</b
+		>{tagsFlatLength} label{tags.length !== 1 ? 's' : ''}
+		{$labelStore.length === tagsFlatLength
+			? noPrintLength !== 0
+				? `(including ${tagsFlatLength - noPrintLength} "no-print" labels)`
+				: ''
+			: `(+${$labelStore.length - tagsFlatLength} Hidden)`} , {Math.ceil(tags.length)}
+		total page{Math.ceil(tags.length) !== 1 ? 's' : ''} (at 30 labels per page)</b
 	>
 	<br />
 	<label for="Height">Auxiliary Text</label>
@@ -137,6 +148,11 @@
 			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
 			disabled={labelSetLocked}
 			on:click={() => (editMode = !editMode)}>{editMode ? 'View' : 'Edit'} Mode</button
+		>
+		<button
+			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
+			on:click={() => (includeNoPrint = !includeNoPrint)}
+			>{includeNoPrint ? 'Hide' : 'Include'} <code>noPrint</code></button
 		>
 		<button
 			class="rounded-md border-2 p-0.5 px-2 border-black disabled:bg-gray-200 disabled:border-transparent disabled:cursor-not-allowed"
@@ -203,10 +219,10 @@
 		on:click={() => pageOffset--}>Previous Group</button
 	>
 	<p class="text-black p-1 m-2">
-		Group {pageOffset + 1} of {Math.ceil($labelStore.length / 30 / 4)}
+		Group {pageOffset + 1} of {Math.ceil(tags.length / 4)}
 	</p>
 	<button
-		disabled={loading || pageOffset >= Math.ceil($labelStore.length / 30 / 4) - 1}
+		disabled={loading || pageOffset >= Math.ceil(tags.length / 4) - 1}
 		class="bg-slate-50 rounded-lg p-1 m-2 disabled:bg-slate-200 disabled:cursor-not-allowed"
 		on:click={() => pageOffset++}>Next Group</button
 	>

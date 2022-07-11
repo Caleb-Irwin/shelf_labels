@@ -90,7 +90,7 @@
 			{/if}
 		{/if}
 	</div>
-	<rect x="0" y="0" width="197" height="50" fill="white" />
+	<rect x="0" y="0" width="197" height="50" fill={label.noPrint ? 'gray' : 'white'} />
 	<text
 		x="50%"
 		y="5"
