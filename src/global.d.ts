@@ -10,6 +10,7 @@ interface LabelSimple {
 	lastPrice?: number;
 	qbAccount?: string;
 	qbName?: string;
+	noPrint?: boolean;
 }
 interface guild {
 	venderName: string;

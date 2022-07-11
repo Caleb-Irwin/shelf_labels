@@ -24,6 +24,7 @@
 				.map((l: unknown) => {
 					if (l && l['description']) l['name'] = l['description'];
 					if (l && l['oldPrice']) l['lastPrice'] = l['oldPrice'];
+					if (l && l['noStockOrPO']) l['noPrint'] = l['noStockOrPO'];
 					return l;
 				})
 				.filter((l: unknown): l is LabelSimple => {
@@ -57,8 +58,10 @@
 </p>
 <p class="text-center">
 	Format: <code
-		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number, "qbName": string, "qbAccount": string}]`}</code
+		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number, "qbName": string, "qbAccount": string, "noPrint": boolean}]`}</code
 	>. <code>lastPrice</code> is optional, but nice for <a href="/verify-labels">Verify Labels</a>.
+	<code>noPrint</code>
+	is optional and defaults to false, and is used to hide labels.
 	<code>qbAccount</code>
 	and <code>qbName</code> fields are needed for <a href="/export-qb">Export to Quickbooks CSV</a> but
 	are otherwise optional. Extra fields are fine.
