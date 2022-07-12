@@ -52,11 +52,8 @@
 			let s: string[] = [];
 			const prevOffset = pageOffset;
 			pageOffset = 0;
-			while (pageOffset <= Math.ceil($labelStore.length / 30 / 4) - 1) {
-				if (
-					Math.ceil($labelStore.length / 30 / 4) !== 1 &&
-					!(pageOffset === 0 && prevOffset === 0)
-				) {
+			while (pageOffset <= Math.ceil(tags.length / 4) - 1) {
+				if (Math.ceil(tags.length / 4) !== 1 && !(pageOffset === 0 && prevOffset === 0)) {
 					await wait(3000);
 				}
 				const ref = document.querySelectorAll('.label-page-holder');
