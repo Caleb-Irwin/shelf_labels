@@ -11,6 +11,11 @@ interface LabelSimple {
 	qbAccount?: string;
 	qbName?: string;
 	noPrint?: boolean;
+	cost?: number;
+	COGSAccount?: string;
+	salesTaxCode?: string;
+	purchaseTaxCode?: string;
+	preferredVendor?: string;
 }
 interface guild {
 	venderName: string;

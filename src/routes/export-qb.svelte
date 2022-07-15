@@ -7,28 +7,41 @@
 		return str.includes(',') ? `"${str}"` : str;
 	}
 
-	function makeCSV(labels: Label[], revertMode: boolean = false): string {
-		const csv = labels.map((tag) => {
-			if (!tag.qbAccount || !tag.qbName || (revertMode && !tag.lastPrice)) {
+	function makeCSV(labels: Label[], revertMode: boolean, createItemMode: boolean): string {
+		const csv = labels.map((label) => {
+			if (!label.qbAccount || !label.qbName || (revertMode && !label.lastPrice)) {
 				alert('Missing QB account or name, or last price. Please verify labels.');
-				console.log(tag);
+				console.log(label);
 				throw new Error('Missing QB account or name, or last price.');
 			}
-			return `Inventory Part,${escapeComma(tag.qbAccount)},${escapeComma(tag.qbName)},${
-				revertMode ? tag.lastPrice : tag.price
-			}`;
+			return `Inventory Part,${escapeComma(label.qbAccount)},${escapeComma(label.qbName)},${
+				revertMode ? label.lastPrice : label.price
+			}${
+				createItemMode
+					? `,${escapeComma(label.name)},${label.cost},${label.salesTaxCode},${label.COGSAccount},${
+							label.name === '' ? '' : 'Inventory Asset'
+					  },${label.name},${label.purchaseTaxCode}`
+					: ''
+			},${label.preferredVendor}`;
 		});
-		csv.unshift('TYPE,ACCOUNT,NAME,PRICE/AMOUNT');
+		csv.unshift(
+			'TYPE,ACCOUNT,NAME,PRICE/AMOUNT' +
+				(createItemMode
+					? ',DESCRIPTION,COST,TAX CODE,COGS Account,ASSET ACCOUNT,DESCRIPTION ON PURCHASE TRANSACTIONS,PURCHASE TAX CODE,PREFERRED VENDOR'
+					: '')
+		);
 		return csv.join('\n');
 	}
 
 	function downloadLabelsAsCSV(
 		exportLabels: Label[],
 		exportName: string,
-		revertMode: boolean = false
+		revertMode: boolean = false,
+		addDescription: boolean = false
 	) {
 		const dataStr =
-			'data:text/json;charset=utf-8,' + encodeURIComponent(makeCSV(exportLabels, revertMode));
+			'data:text/json;charset=utf-8,' +
+			encodeURIComponent(makeCSV(exportLabels, revertMode, addDescription));
 		const downloadAnchorNode = document.createElement('a');
 		downloadAnchorNode.setAttribute('href', dataStr);
 		downloadAnchorNode.setAttribute('download', exportName + '.csv');
@@ -97,5 +110,17 @@
 					.substring(0, new Date().toISOString().indexOf('T'))})`,
 				true
 			)}>Download Revert CSV</button
+	>
+	<button
+		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
+		on:click={() =>
+			downloadLabelsAsCSV(
+				get(labelStore),
+				`${$confStore.name} (qb-create-${new Date()
+					.toISOString()
+					.substring(0, new Date().toISOString().indexOf('T'))})`,
+				false,
+				true
+			)}>Download Create Items CSV</button
 	>
 </div>

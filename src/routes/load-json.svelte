@@ -28,7 +28,7 @@
 					return l;
 				})
 				.filter((l: unknown): l is LabelSimple => {
-					if (l['barcode'] && l['name'] && l['price']) {
+					if (l['barcode'] && typeof l['name'] === 'string' && l['price']) {
 						return true;
 					}
 					alert('Item failed validation: ' + JSON.stringify(l));
@@ -58,13 +58,15 @@
 </p>
 <p class="text-center">
 	Format: <code
-		>{`[{"barcode":"string","name":"string","price": number, "lastPrice": number, "qbName": string, "qbAccount": string, "noPrint": boolean}]`}</code
+		>{`[{"barcode":string,"name":string,"price": number, "lastPrice": number, "qbName": string, "qbAccount": string, "noPrint": boolean, "salesTaxCode": string, "purchaseTaxCode": string, "cost": number, "COGSAccount": string}]`}</code
 	>. <code>lastPrice</code> is optional, but nice for <a href="/verify-labels">Verify Labels</a>.
 	<code>noPrint</code>
 	is optional and defaults to false, and is used to hide labels.
 	<code>qbAccount</code>
-	and <code>qbName</code> fields are needed for <a href="/export-qb">Export to Quickbooks CSV</a> but
-	are otherwise optional. Extra fields are fine.
+	and <code>qbName</code> fields are needed for <a href="/export-qb">Export to Quickbooks CSV</a>
+	but are otherwise optional. <code>cost</code>, <code>COGSAccount</code>,
+	<code>salesTaxCode</code>, and <code>purchaseTaxCode</code> are all required to create new items
+	using <a href="/export-qb">Export to Quickbooks CSV</a>. Extra fields are fine.
 </p>
 
 <div class="flex p-2 justify-center">
