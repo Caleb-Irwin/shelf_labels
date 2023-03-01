@@ -10,11 +10,13 @@
 	function makeCSV(labels: Label[], revertMode: boolean, createItemMode: boolean): string {
 		const csv = labels.map((label) => {
 			if (!label.qbAccount || !label.qbName || (revertMode && !label.lastPrice)) {
-				alert('Missing QB account or name, or last price. Please verify labels.');
+				alert(
+					'Missing QB account or name, or last price. Please verify labels again. Generating anyway!'
+				);
 				console.log(label);
-				throw new Error('Missing QB account or name, or last price.');
+				// throw new Error('Missing QB account or name, or last price.');
 			}
-			return `Inventory Part,${escapeComma(label.qbAccount)},${escapeComma(label.qbName)},${
+			return `Inventory Part,${escapeComma(label.qbAccount || '')},${escapeComma(label.qbName)},${
 				revertMode ? label.lastPrice : label.price
 			}${
 				createItemMode

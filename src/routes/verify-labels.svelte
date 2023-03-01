@@ -199,8 +199,12 @@
 		bind:value={autoFilterNegative}
 	/>
 	<!-- svelte-ignore missing-declaration -->
-	<button class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white" on:click={toggle}
-		>{active ? 'Cancel' : 'Start'}</button
+	<button
+		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white"
+		on:click={() => {
+			if (!active || confirm('Are you sure you would like to cancel? All progress will be lost.'))
+				toggle();
+		}}>{active ? 'Cancel' : 'Start'}</button
 	>
 	<b>Auto Verifyed (of total): {sorted.passed.length}/{$labelStore.length}</b>
 </div>
