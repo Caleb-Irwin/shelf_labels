@@ -46,7 +46,9 @@
 			.toString()
 			.slice(2)}`;
 	const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
-	const createPdf = async () => {
+	const createPdf = () => {
+		let res;
+		const prom = new Promise((res0) => (res = res0));
 		loading = true;
 		setTimeout(async () => {
 			let s: string[] = [];
@@ -88,7 +90,9 @@
 			nd = 0;
 			td = 0;
 			pageOffset = prevOffset;
+			res();
 		}, 0);
+		return prom;
 	};
 	$: {
 		pageOffset;
@@ -108,10 +112,12 @@
 	if (browser) {
 		const listener: (this: Window, ev: MessageEvent<any>) => any = async (event) => {
 			if (event.data === 'download+delete') {
-				await createPdf();
-				confStore.deleteLabelSet($confStore.id);
-				window.top.postMessage('done', '*');
-				removeEventListener('message', listener);
+				setTimeout(async () => {
+					await createPdf();
+					confStore.deleteLabelSet($confStore.id);
+					window.top.postMessage('done', '*');
+					removeEventListener('message', listener);
+				}, 3000);
 			}
 		};
 		window.addEventListener('message', listener);

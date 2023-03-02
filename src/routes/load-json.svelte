@@ -49,9 +49,14 @@
 	// For embedding
 	if (browser) {
 		const listener: (this: Window, ev: MessageEvent<any>) => any = (event) => {
+			console.log('received! ' + event.data);
+			// console.log('event ' + event.data);
+
 			if ((event.data as string)?.startsWith('[{')) {
+				console.log('running');
+
 				json = event.data;
-				load();
+				setTimeout(load, 10);
 			}
 			removeEventListener('message', listener);
 		};
