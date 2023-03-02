@@ -103,6 +103,20 @@
 
 	let loading = false,
 		tagOpen = null;
+
+	// For embedding
+	if (browser) {
+		const listener: (this: Window, ev: MessageEvent<any>) => any = async (event) => {
+			if (event.data === 'download+delete') {
+				await createPdf();
+				confStore.deleteLabelSet($confStore.id);
+				window.top.postMessage('done', '*');
+				removeEventListener('message', listener);
+			}
+		};
+		window.addEventListener('message', listener);
+		window.top?.postMessage('ready', '*');
+	}
 </script>
 
 <svelte:head>

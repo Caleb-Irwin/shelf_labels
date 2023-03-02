@@ -2,7 +2,6 @@
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { confStore } from '$lib/labelStore';
-	import { onMount } from 'svelte';
 
 	let files: FileList,
 		json = '',
@@ -46,6 +45,19 @@
 			alert('Try agian! Error = ' + e);
 		}
 	};
+
+	// For embedding
+	if (browser) {
+		const listener: (this: Window, ev: MessageEvent<any>) => any = (event) => {
+			if ((event.data as string)?.startsWith('[{')) {
+				json = event.data;
+				load();
+			}
+			removeEventListener('message', listener);
+		};
+		window.addEventListener('message', listener);
+		if (window !== window.top) window.top?.postMessage('ready', '*');
+	}
 </script>
 
 <svelte:head>
