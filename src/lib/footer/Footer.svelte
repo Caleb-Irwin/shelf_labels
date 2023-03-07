@@ -6,9 +6,7 @@
 	import { labelStore, confStore } from '$lib/labelStore';
 
 	$: open = $confStore.id;
-	$: {
-		if (browser && open) confStore.changeOpenLabelSet(open);
-	}
+	let selected: HTMLSelectElement;
 
 	const rename = () => {
 		const newName = prompt('Rename', get(confStore).name);
@@ -46,15 +44,13 @@
 		name="Label Set"
 		id="label-set"
 		class="text-gray-700 border-2 border-solid border-gray-500 rounded-md h-7"
-		bind:value={open}
-		on:change={(e) => {
-			// @ts-expect-error missing target type
-			confStore.changeOpenLabelSet(e.target.value, labelStore);
-			// @ts-expect-error missing target type
-			e.target.blur();
+		value={open}
+		bind:this={selected}
+		on:click={() => {
+			if ($confStore.id !== selected.value) confStore.changeOpenLabelSet(selected.value);
 		}}
 	>
-		{#each $confStore.allLabelSets as labelSet}
+		{#each $confStore.allLabelSets as labelSet (labelSet.id)}
 			<option value={labelSet.id}
 				>{labelSet.name} ({labelSet.locked ? '🔒 ' : ''}{labelSet.id === $confStore.id
 					? 'Now'
