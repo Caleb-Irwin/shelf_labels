@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { labelStore, confStore } from '$lib/labelStore';
-	import JsBarcode from 'jsbarcode';
-	import { onMount } from 'svelte';
+	import * as JsBarcode from 'jsbarcode';
+	import { onMount, tick } from 'svelte';
 	import divideArray from '$lib/divideArray';
 	import { genPDF } from '$lib/genPdf';
 	import LabelPage from '$lib/LabelPage.svelte';
@@ -45,7 +45,7 @@
 			.getFullYear()
 			.toString()
 			.slice(2)}`;
-	const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 	const createPdf = () => {
 		let res;
 		const prom = new Promise((res0) => (res = res0));
@@ -56,7 +56,13 @@
 			pageOffset = 0;
 			while (pageOffset <= Math.ceil(tags.length / 4) - 1) {
 				if (Math.ceil(tags.length / 4) !== 1 && !(pageOffset === 0 && prevOffset === 0)) {
-					await wait(3000);
+					// await wait(500);
+					let i = 0;
+					while (i < 6000) {
+						await tick();
+						i++;
+					}
+					loadBarcodes();
 				}
 				const ref = document.querySelectorAll('.label-page-holder');
 				// console.log(ref);
@@ -97,7 +103,7 @@
 	$: {
 		pageOffset;
 		$confStore.id;
-		if (browser) setTimeout(() => loadBarcodes(), 0);
+		if (browser && !loading) setTimeout(() => loadBarcodes(), 0);
 	}
 
 	$: timePerPage = (Date.now() - startTime) / 1000 / nd;
@@ -154,6 +160,9 @@
 	<input type="number" name="Height" id="" bind:value={sf} class="bg-slate-300 p-1 text-center" />
 	<button
 		class="border-solid border-black border-2 rounded-md p-1 m-1 bg-white disabled:cursor-wait"
+		style="background: linear-gradient(to right, #EA580C {loading && $labelStore.length > 240
+			? Math.ceil((nd / td) * 100)
+			: 0}%, transparent 0%) no-repeat;"
 		disabled={loading}
 		on:click={createPdf}
 		>{#if !loading} Generate PDF {:else} <p class="animate-ping">◯</p> {/if}</button
