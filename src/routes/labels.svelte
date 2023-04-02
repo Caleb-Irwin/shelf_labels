@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { labelStore, confStore } from '$lib/labelStore';
-	import * as JsBarcode from 'jsbarcode';
+	import JsBarcode from 'jsbarcode';
 	import { onMount, tick } from 'svelte';
 	import divideArray from '$lib/divideArray';
 	import { genPDF } from '$lib/genPdf';
