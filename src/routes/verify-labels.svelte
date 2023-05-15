@@ -271,6 +271,14 @@
 					class=" border-solid border-black border-2 rounded-md p-1 m-1 bg-white text-xl"
 					>{editMode ? 'Close Edit Mode' : 'Edit Label'}</button
 				>
+				<a
+					target="_blank"
+					rel="noopener noreferrer"
+					href={`https://shop.officeexperts.ca/products/${currentLabel.barcode
+						.slice(currentLabel.barcode.length - 11)
+						.slice(0, 10)}`}
+					class="underline">View In Shop ↗</a
+				>
 			</div>
 			{#if editMode}
 				<EditItem
